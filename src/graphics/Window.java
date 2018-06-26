@@ -10,7 +10,7 @@ public class Window extends Frame {
 		canvas=new JGameCanvas();
 		add(canvas);
 		setVisible(true);
-		setSize(1000,1000);
+		setSize(Options.screenTilesW*Options.tileW,Options.screenTilesH*Options.tileH);
 	}
 
 	public void setTile(Tile t, int x, int y){
