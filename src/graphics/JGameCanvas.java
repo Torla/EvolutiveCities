@@ -21,26 +21,30 @@ public class JGameCanvas extends JPanel{
 
 	JGameCanvas() {
 		tileset = Toolkit.getDefaultToolkit().getImage("tileset1.png");
+		for(int i=0;i<Options.screenTilesH;i++) {
+			for (int j = 0; j < Options.screenTilesW; j++) {
+				map[i][j]=Tile.GRASS;
+			}
+		}
 
-		for(int i=0;i<Options.screenTilesH;i++)
-			for(int j=0;j<Options.screenTilesW;j++)
-			map[j][i] = Tile.GRASS;
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		g.setColor(Color.black);
 		g.fillRect(0, 0, getWidth(), getHeight());
-
-		for(int i=0;i<Options.screenTilesH;i++)
-			for(int j=0;j<Options.screenTilesW;j++)
-				drawTile(g, map[j][i], i*Options.tileW,j*Options.tileH);
+		for(int i=0;i<Options.screenTilesH;i++) {
+			for (int j = 0; j < Options.screenTilesW; j++) {
+				drawTile(g, Tile.GRASS, i * Options.tileW, j * Options.tileH);
+				drawTile(g, map[j][i], i * Options.tileW, j * Options.tileH);
+			}
+		}
 	}
 
 	void drawTile(Graphics g, Tile t, int x, int y){
 		// map Tile from the tileset
-		int mx = t.ordinal()%10;
-		int my = t.ordinal()/10;
+		int mx = t.ordinal()%7;
+		int my = t.ordinal()/7;
 		g.drawImage(tileset, x, y, x+Options.tileW, y+Options.tileH,
 				mx*tW, my*tH,  mx*tW+tW, my*tH+tH, this);
 	}
