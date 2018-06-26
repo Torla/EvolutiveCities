@@ -16,6 +16,7 @@ public class JGameCanvas extends JPanel{
 	private static final int tW = 16; // tile width
 	private static final int tH = 16; // tile height
 	private static final Tile map[][] = new Tile[Options.screenTilesH][Options.screenTilesW];
+	private static final boolean mapChange[][] = new boolean[Options.screenTilesH][Options.screenTilesW];
 
 	private Image tileset;
 
@@ -24,6 +25,7 @@ public class JGameCanvas extends JPanel{
 		for(int i=0;i<Options.screenTilesH;i++) {
 			for (int j = 0; j < Options.screenTilesW; j++) {
 				map[i][j]=Tile.GRASS;
+				mapChange[i][j]=true;
 			}
 		}
 
@@ -31,24 +33,28 @@ public class JGameCanvas extends JPanel{
 
 	@Override
 	public void paintComponent(Graphics g) {
-		g.setColor(Color.black);
+		g.setColor(Color.green);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		for(int i=0;i<Options.screenTilesH;i++) {
 			for (int j = 0; j < Options.screenTilesW; j++) {
-				drawTile(g, Tile.GRASS, i * Options.tileW, j * Options.tileH);
-				drawTile(g, map[j][i], i * Options.tileW, j * Options.tileH);
+				if(mapChange[i][j]) {
+					drawTile(g, map[j][i], i, j);
+					mapChange[i][j]=false;
+				}
 			}
 		}
 	}
 
 	void drawTile(Graphics g, Tile t, int x, int y){
 		// map Tile from the tileset
+		mapChange[x][y]=true;
 		int mx = t.ordinal()%7;
 		int my = t.ordinal()/7;
-		g.drawImage(tileset, x, y, x+Options.tileW, y+Options.tileH,
+		g.drawImage(tileset, x* Options.tileW, y* Options.tileH, x* Options.tileW+Options.tileW, y* Options.tileH+Options.tileH,
 				mx*tW, my*tH,  mx*tW+tW, my*tH+tH, this);
 	}
 	void setTile(Tile t, int x,int y){
 		map[x][y]=t;
+		mapChange[x][y]=true;
 	}
 }
