@@ -43,7 +43,6 @@ public class Graphics implements Runnable {
 					.collect(Collectors.toList())
 			     ) {
 				window.setTile(x.getTile(),x.getPositionX()-screenPosX,x.getPositionY()-screenPosY);
-				System.out.println(screenPosX);
 			}
 			window.repaint();
 			try {

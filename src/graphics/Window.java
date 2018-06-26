@@ -37,10 +37,10 @@ public class Window extends Frame implements KeyListener,WindowListener{
 				Graphics.moveScreen(0,1);
 				break;
 			case KeyEvent.VK_LEFT:
-				Graphics.moveScreen(1,0);
+				Graphics.moveScreen(-1,0);
 				break;
 			case KeyEvent.VK_RIGHT :
-				Graphics.moveScreen(-1,0);
+				Graphics.moveScreen(1,0);
 				break;
 		}
 	}
