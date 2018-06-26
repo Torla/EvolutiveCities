@@ -25,7 +25,7 @@ public class JGameCanvas extends JPanel{
 		for(int i=0;i<Options.screenTilesH;i++) {
 			for (int j = 0; j < Options.screenTilesW; j++) {
 				map[i][j]=Tile.GRASS;
-				mapChange[i][j]=true;
+				mapChange[i][j]=false;
 			}
 		}
 
@@ -38,7 +38,7 @@ public class JGameCanvas extends JPanel{
 		for(int i=0;i<Options.screenTilesH;i++) {
 			for (int j = 0; j < Options.screenTilesW; j++) {
 				if(mapChange[i][j]) {
-					drawTile(g, map[j][i], i, j);
+					drawTile(g, map[i][j], i, j);
 					mapChange[i][j]=false;
 				}
 			}
@@ -54,6 +54,7 @@ public class JGameCanvas extends JPanel{
 				mx*tW, my*tH,  mx*tW+tW, my*tH+tH, this);
 	}
 	void setTile(Tile t, int x,int y){
+		System.out.println(x +" "+ y);
 		map[x][y]=t;
 		mapChange[x][y]=true;
 	}

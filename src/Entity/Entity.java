@@ -1,5 +1,6 @@
 package Entity;
 
+import Game.World;
 import graphics.Showable;
 import graphics.Tile;
 
@@ -9,10 +10,11 @@ public abstract class Entity implements Showable{
 	protected int positionX;
 	protected int positionY;
 
-	public Entity(Tile tile, int positionX, int positionY) {
+	public Entity(World world, Tile tile, int positionX, int positionY) {
 		this.tile = tile;
 		this.positionX = positionX;
 		this.positionY = positionY;
+		world.addEntity(this);
 	}
 
 	@Override
@@ -27,6 +29,6 @@ public abstract class Entity implements Showable{
 
 	@Override
 	public int getPositionY() {
-		return 0;
+		return positionY;
 	}
 }
