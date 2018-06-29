@@ -2,6 +2,7 @@ package graphics;
 
 import Game.World;
 import javafx.stage.Screen;
+import match.Match;
 
 import java.util.Random;
 import java.util.stream.Collector;
@@ -12,6 +13,7 @@ public class Graphics implements Runnable {
 	private static Graphics graphics = new Graphics();
 	private static Window window = new Window();
 	private static World world;
+	private static Match match;
 
 	private static int screenPosX=0;
 	private static int screenPosY=0;
@@ -24,7 +26,11 @@ public class Graphics implements Runnable {
 		Graphics.world = world;
 	}
 
-	public static void moveScreen(int x,int y){
+	public static void setMatch(Match match) {
+		Graphics.match = match;
+	}
+
+	public static void moveScreen(int x, int y){
 		screenPosX+=x;
 		screenPosY+=y;
 	}
@@ -39,6 +45,12 @@ public class Graphics implements Runnable {
 		while(true){
 			long time=System.currentTimeMillis();
 			for (Showable x:world.getShowable().stream()
+					.filter(x->x.getPositionX()>=screenPosX && x.getPositionX()<screenPosX+Options.screenTilesW && x.getPositionY()>=screenPosY && x.getPositionY()<screenPosY+Options.screenTilesH)
+					.collect(Collectors.toList())
+			     ) {
+				window.setTile(x.getTile(),x.getPositionX()-screenPosX,x.getPositionY()-screenPosY);
+			}
+			for (Showable x:match.getShowable().stream()
 					.filter(x->x.getPositionX()>=screenPosX && x.getPositionX()<screenPosX+Options.screenTilesW && x.getPositionY()>=screenPosY && x.getPositionY()<screenPosY+Options.screenTilesH)
 					.collect(Collectors.toList())
 			     ) {

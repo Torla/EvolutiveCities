@@ -6,23 +6,30 @@ import Entity.building.Field;
 import Entity.building.House;
 import Entity.building.Keep;
 import Game.World;
+import graphics.Showable;
+import graphics.Tile;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class City {
 
-	World world;
+	private World world;
 
 
+	private int population;
+	private int food;
 
-	int population;
-	int food;
+	private int cursorX;
+	private int cursorY;
 
-	public City(World world) {
+	public City(World world,int cursorX, int cursorY) {
 		this.world = world;
 		food=Options.startingFood;
+		this.cursorX=cursorX;
+		this.cursorY=cursorY;
 	}
 
 
@@ -75,8 +82,29 @@ public class City {
 		return food;
 	}
 
+	public Set<Showable> getShowable(){
+		HashSet<Showable> ret = new HashSet<>();
+		ret.add(new Showable(){
+			@Override
+			public Tile getTile() {
+				return Tile.Z8;
+			}
+
+			@Override
+			public int getPositionX() {
+				return cursorX;
+			}
+
+			@Override
+			public int getPositionY() {
+				return cursorY;
+			}
+		});
+		return ret;
+	}
+
 	@Override
 	public String toString() {
-		return population + " " + food;
+		return "p:" + population + " f:" + food + " c:" + cursorX + "," + cursorY ;
 	}
 }
