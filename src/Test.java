@@ -1,14 +1,29 @@
-import Entity.building.Field;
-import Entity.building.House;
-import Entity.building.Keep;
-import Game.World;
-import city.City;
-import graphics.Graphics;
-import match.Match;
-
-import java.util.LinkedList;
+import automaton.Automaton;
+import automaton.Edge;
+import automaton.StackAction;
+import automaton.State;
+import city.Action;
 
 public class Test {
+	public static void main(String[] args) {
+		Automaton automaton = new Automaton();
+		State state = new State();
+		State state1 = new State();
+		state.addEdge(0,new Edge(state, StackAction.PUSH,1, Action.CURSOR_NORD));
+		state.addEdge(1,new Edge(state1, StackAction.NULL,0, Action.CURSOR_NORD));
+		state1.addEdge(1,new Edge(state1,StackAction.POP,0,Action.BUILD_HOUSE));
+		state1.addEdge(0,new Edge(state,StackAction.PUSH,0,Action.CURSOR_SUD));
+		automaton.setInitialState(state);
+		automaton.addState(state1);
+		automaton.reset();
+		automaton.stackPush(0);
+		System.out.println(automaton);
+		while(true){
+			System.out.println(automaton.next());
+		}
+	}
+
+	/*
 	public static void main(String[] args) throws InterruptedException {
 		World world=new World();
 		City city=new City(world,0,0);
@@ -36,5 +51,7 @@ public class Test {
 		Thread t = new Thread(match);
 		t.start();
 		t.join();
+		System.out.println(match.rank());
 	}
+	*/
 }

@@ -135,6 +135,6 @@ public class City {
 
 	@Override
 	public String toString() {
-		return "p:" + population + " f:" + food + " c:" + cursorX + "," + cursorY ;
+		return "p:" + population + " f:" + food + " c:" + cursorX + "," + cursorY + " b:" + world.getEntities().stream().filter(x->x.getOwner()==this).count();
 	}
 }
