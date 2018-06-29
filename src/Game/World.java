@@ -12,6 +12,9 @@ public class World {
 	public void addEntity(Entity entity){
 		entities.add(entity);
 	}
+	public void removeEntity(Entity entity){
+		entities.remove(entity);
+	}
 
 	public HashSet<Entity> getEntities() {
 		return entities;
