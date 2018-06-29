@@ -54,7 +54,12 @@ public class JGameCanvas extends JPanel{
 				mx*tW, my*tH,  mx*tW+tW, my*tH+tH, this);
 	}
 	void setTile(Tile t, int x,int y){
-		map[x][y]=t;
-		mapChange[x][y]=true;
+		try {
+			map[x][y] = t;
+			mapChange[x][y]=true;
+		}catch (ArrayIndexOutOfBoundsException e){ //todo caused by concurrency
+			e.printStackTrace();
+		}
+
 	}
 }

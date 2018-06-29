@@ -25,8 +25,9 @@ public class EvolutiveAutomaton extends Automaton{
 				);
 
 			}
-			this.setInitialState(states.get(0));
+			this.addState(state);
 		}
+		this.setInitialState(states.get(0));
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package Game;
 import Entity.Entity;
 import graphics.Showable;
 
+import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 
 public class World {
@@ -21,6 +22,14 @@ public class World {
 	}
 
 	public HashSet<Showable> getShowable(){
-		return new HashSet<>(entities);
+		HashSet ret = null;
+		while(ret==null) {
+			try {
+				ret = new HashSet<>(entities);
+			} catch (ConcurrentModificationException e) { //todo mutex
+				e.printStackTrace();
+			}
+		}
+		return ret;
 	}
 }

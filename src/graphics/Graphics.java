@@ -42,13 +42,13 @@ public class Graphics implements Runnable {
 		while(true){
 			long time=System.currentTimeMillis();
 			for (Showable x:world.getShowable().stream()
-					.filter(x->x.getPositionX()>=screenPosX && x.getPositionX()<screenPosX+Options.screenTilesW && x.getPositionY()>=screenPosY && x.getPositionY()<screenPosY+Options.screenTilesH)
+					.filter(x->x.getPositionX()>=screenPosX && x.getPositionX()<screenPosX+Options.screenTilesW && x.getPositionY()>screenPosY && x.getPositionY()<screenPosY+Options.screenTilesH)
 					.collect(Collectors.toList())
 			     ) {
 				window.setTile(x.getTile(),x.getPositionX()-screenPosX,x.getPositionY()-screenPosY);
 			}
 			for (Showable x:match.getShowable().stream()
-					.filter(x->x.getPositionX()>=screenPosX && x.getPositionX()<screenPosX+Options.screenTilesW && x.getPositionY()>=screenPosY && x.getPositionY()<screenPosY+Options.screenTilesH)
+					.filter(x->x.getPositionX()>=screenPosX && x.getPositionX()<screenPosX+Options.screenTilesW && x.getPositionY()>screenPosY && x.getPositionY()<screenPosY+Options.screenTilesH)
 					.collect(Collectors.toList())
 			     ) {
 				window.setTile(x.getTile(),x.getPositionX()-screenPosX,x.getPositionY()-screenPosY);
@@ -56,7 +56,8 @@ public class Graphics implements Runnable {
 			window.repaint();
 			try {
 				Thread.sleep(1000/Options.frameRate - (System.currentTimeMillis()-time));
-			} catch (InterruptedException e) {
+			}catch (IllegalArgumentException e){}
+			catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}

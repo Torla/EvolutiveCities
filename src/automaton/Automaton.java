@@ -15,6 +15,7 @@ public class Automaton implements Serializable {
 	private Stack<Integer> stack = new Stack<>();
 
 	public void addState(State state){
+		state.setID(states.size());
 		states.add(state);
 	}
 

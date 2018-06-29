@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 public class Match implements Runnable{
 
-	private static final int sleep = 1000;
+	private static final int sleep = 100;
 
-	private static final int maxTurn = 100000;
+	private static final int maxTurn = 300;
 	Set<City> cities=null;
 
 	public Match(Collection<City> cities) {
@@ -24,7 +24,6 @@ public class Match implements Runnable{
 	public void run() {
 		for(int turn=0;turn<maxTurn;turn++){
 			cities.forEach(City::turn);
-			System.out.println(cities);
 			try {
 				Thread.sleep(sleep);
 			} catch (InterruptedException e) {
@@ -40,7 +39,7 @@ public class Match implements Runnable{
 	}
 
 	public List<City> rank(){
-		return cities.stream().sorted((x,y)->Integer.compare(x.getPopulation(),y.getPopulation())).collect(Collectors.toList());
+		return cities.stream().sorted((y,x)->Integer.compare(x.getPopulation(),y.getPopulation())).collect(Collectors.toList());
 	}
 
 	public Set<Showable> getShowable(){

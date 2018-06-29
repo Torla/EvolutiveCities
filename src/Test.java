@@ -10,8 +10,10 @@ import city.City;
 import evolutiveAutomaton.EvolutiveAutomaton;
 import graphics.Graphics;
 import Game.Match;
+import org.w3c.dom.ranges.Range;
 
 import java.util.LinkedList;
+import java.util.stream.IntStream;
 
 public class Test {
 
@@ -22,18 +24,9 @@ public class Test {
 
 	public static void main(String[] args) throws InterruptedException {
 		World world=new World();
-		City city=new City(world,auto(),0,0);
-		new House(world,city,0,0);
-		new Field(world,city,1,0);
-		new Field(world,city,1,1);
-		new House(world,city,0,1);
-		new Field(world,city,1,2);
-		new House(world,city,2,2);
-		new Field(world,city,3,3);
-		new House(world,city,3,2);
 
 		LinkedList<City> c = new LinkedList<>();
-		c.add(city);
+		for(int i=0;i<10;i++){ c.add(new City(world,auto(),10,10));}
 		Match match= new Match(c);
 
 		Graphics.setWorld(world);
@@ -45,7 +38,10 @@ public class Test {
 		Thread t = new Thread(match);
 		t.start();
 		t.join();
+
+
 		System.out.println(match.rank());
+		System.out.println(match.rank().get(0).getAutomaton());
 	}
 
 }

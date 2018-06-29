@@ -97,15 +97,23 @@ public class City {
 		}
 	}
 
+
 	public void turn(){
 		production();
+
 		upkeep();
-		perform((Action) automaton.next());
+		Action action;
+		action=(Action) automaton.next();
+		perform(action);
 	};
 
 
 	public World getWorld() {
 		return world;
+	}
+
+	public Automaton getAutomaton() {
+		return automaton;
 	}
 
 	public int getPopulation() {
