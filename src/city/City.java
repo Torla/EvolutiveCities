@@ -11,6 +11,7 @@ import graphics.Tile;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -63,10 +64,39 @@ public class City {
 		}
 	}
 
+	private void perform(Action action){
+		System.out.println(action);
+		switch (action){
+			case NULL:
+				break;
+			case CURSOR_NORD:
+				cursorY--;
+				break;
+			case CURSOR_SUD:
+				cursorY++;
+				break;
+			case CURSOR_EST:
+				cursorX++;
+				break;
+			case CURSOR_WEST:
+				cursorX--;
+				break;
+			case BUILD_HOUSE:
+				new House(world,this,cursorX,cursorY);
+				break;
+			case BUILD_FIELD:
+				new Field(world,this,cursorX,cursorY);
+				break;
+			case BUILD_KEEP:
+				new Keep(world,this,cursorX,cursorY);
+				break;
+		}
+	}
 
 	public void turn(){
 		production();
 		upkeep();
+		perform(Action.values()[new Random().nextInt(Action.values().length)]);
 	};
 
 

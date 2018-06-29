@@ -11,13 +11,16 @@ import java.util.LinkedList;
 public class Test {
 	public static void main(String[] args) throws InterruptedException {
 		World world=new World();
-		City city=new City(world,10,0);
+		City city=new City(world,0,0);
 		new House(world,city,0,0);
 		new Field(world,city,1,0);
 		new Field(world,city,1,1);
 		new House(world,city,0,1);
-		new Keep(world,city,2,2);
-		new Keep(world,city,2,3);
+		new Field(world,city,1,2);
+		new House(world,city,2,2);
+		new Field(world,city,3,3);
+		new House(world,city,3,2);
+
 		LinkedList<City> c = new LinkedList<>();
 		c.add(city);
 		Match match= new Match(c);

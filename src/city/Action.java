@@ -1,4 +1,12 @@
 package city;
 
 public enum Action {
+	NULL,
+	CURSOR_NORD,
+	CURSOR_SUD,
+	CURSOR_EST,
+	CURSOR_WEST,
+	BUILD_HOUSE,
+	BUILD_FIELD,
+	BUILD_KEEP
 }
