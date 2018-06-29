@@ -1,33 +1,28 @@
+import Entity.building.Field;
+import Entity.building.House;
+import Game.World;
 import automaton.Automaton;
 import automaton.Edge;
 import automaton.StackAction;
 import automaton.State;
 import city.Action;
+import city.City;
+import evolutiveAutomaton.EvolutiveAutomaton;
+import graphics.Graphics;
+import Game.Match;
+
+import java.util.LinkedList;
 
 public class Test {
-	public static void main(String[] args) {
-		Automaton automaton = new Automaton();
-		State state = new State();
-		State state1 = new State();
-		state.addEdge(0,new Edge(state, StackAction.PUSH,1, Action.CURSOR_NORD));
-		state.addEdge(1,new Edge(state1, StackAction.NULL,0, Action.CURSOR_NORD));
-		state1.addEdge(1,new Edge(state1,StackAction.POP,0,Action.BUILD_HOUSE));
-		state1.addEdge(0,new Edge(state,StackAction.PUSH,0,Action.CURSOR_SUD));
-		automaton.setInitialState(state);
-		automaton.addState(state1);
-		automaton.reset();
-		automaton.stackPush(0);
-		System.out.println(automaton);
-		while(true){
-			System.out.println(automaton.next());
-		}
+
+	static public EvolutiveAutomaton auto() {
+		return new EvolutiveAutomaton(Action.values());
 	}
 
-	/*
+
 	public static void main(String[] args) throws InterruptedException {
 		World world=new World();
-		City city=new City(world,0,0);
-		City city1=new City(world,10,10);
+		City city=new City(world,auto(),0,0);
 		new House(world,city,0,0);
 		new Field(world,city,1,0);
 		new Field(world,city,1,1);
@@ -39,7 +34,6 @@ public class Test {
 
 		LinkedList<City> c = new LinkedList<>();
 		c.add(city);
-		c.add(city1);
 		Match match= new Match(c);
 
 		Graphics.setWorld(world);
@@ -53,5 +47,5 @@ public class Test {
 		t.join();
 		System.out.println(match.rank());
 	}
-	*/
+
 }

@@ -1,11 +1,8 @@
 package graphics;
 
 import Game.World;
-import javafx.stage.Screen;
-import match.Match;
+import Game.Match;
 
-import java.util.Random;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Graphics implements Runnable {

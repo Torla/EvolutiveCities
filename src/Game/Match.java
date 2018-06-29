@@ -1,4 +1,4 @@
-package match;
+package Game;
 
 import Game.World;
 import city.City;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class Match implements Runnable{
 
-	private static final int sleep = 20;
+	private static final int sleep = 1000;
 
 	private static final int maxTurn = 100000;
 	Set<City> cities=null;
@@ -24,12 +24,12 @@ public class Match implements Runnable{
 	public void run() {
 		for(int turn=0;turn<maxTurn;turn++){
 			cities.forEach(City::turn);
+			System.out.println(cities);
 			try {
 				Thread.sleep(sleep);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println(cities);
 		}
 	}
 

@@ -1,6 +1,7 @@
 package automaton;
 
 import java.io.Serializable;
+import java.util.EmptyStackException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
@@ -39,8 +40,18 @@ public class Automaton implements Serializable {
 	}
 
 	public AutomatonOutputValues next(){
-		Edge edge=currentState.getEdge(stack.peek());
-		if(edge.getStackAction()==StackAction.POP) stack.pop();
+		Edge edge;
+		try {
+			edge = currentState.getEdge(stack.peek());
+		}catch (EmptyStackException e){
+			edge = currentState.getEdge(0);
+		}
+		if (edge.getStackAction() == StackAction.POP) {
+			try {
+				stack.pop();
+			} catch (EmptyStackException e) {
+			}
+		}
 		else if (edge.getStackAction()==StackAction.PUSH) stack.push(edge.getStackValue());
 		currentState=edge.getToState();
 		return edge.getOutput();

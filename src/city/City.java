@@ -6,6 +6,7 @@ import Entity.building.Field;
 import Entity.building.House;
 import Entity.building.Keep;
 import Game.World;
+import automaton.Automaton;
 import graphics.Showable;
 import graphics.Tile;
 
@@ -19,6 +20,8 @@ public class City {
 
 	private World world;
 
+	private Automaton automaton;
+
 
 	private int population;
 	private int food;
@@ -26,8 +29,10 @@ public class City {
 	private int cursorX;
 	private int cursorY;
 
-	public City(World world,int cursorX, int cursorY) {
+	public City(World world,Automaton automaton,int cursorX, int cursorY) {
 		this.world = world;
+		this.automaton=automaton;
+		automaton.reset();
 		food=Options.startingFood;
 		this.cursorX=cursorX;
 		this.cursorY=cursorY;
@@ -65,7 +70,6 @@ public class City {
 	}
 
 	private void perform(Action action){
-		System.out.println(action);
 		switch (action){
 			case NULL:
 				break;
@@ -96,7 +100,7 @@ public class City {
 	public void turn(){
 		production();
 		upkeep();
-		perform(Action.values()[new Random().nextInt(Action.values().length)]);
+		perform((Action) automaton.next());
 	};
 
 
