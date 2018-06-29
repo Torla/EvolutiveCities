@@ -57,8 +57,8 @@ public class City {
 				freeWorkers -= Options.workerPerKepp;
 			}
 			if (food < 0 || freeWorkers < 0) {
-				food = 0;
 				entity.destroy();
+				food=(food<0)?0:food;
 			}
 
 		}

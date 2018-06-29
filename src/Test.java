@@ -12,6 +12,7 @@ public class Test {
 	public static void main(String[] args) throws InterruptedException {
 		World world=new World();
 		City city=new City(world,0,0);
+		City city1=new City(world,10,10);
 		new House(world,city,0,0);
 		new Field(world,city,1,0);
 		new Field(world,city,1,1);
@@ -23,6 +24,7 @@ public class Test {
 
 		LinkedList<City> c = new LinkedList<>();
 		c.add(city);
+		c.add(city1);
 		Match match= new Match(c);
 
 		Graphics.setWorld(world);
