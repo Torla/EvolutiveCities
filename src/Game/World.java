@@ -27,7 +27,7 @@ public class World {
 			try {
 				ret = new HashSet<>(entities);
 			} catch (ConcurrentModificationException e) { //todo mutex
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 		return ret;
