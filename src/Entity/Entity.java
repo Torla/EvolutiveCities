@@ -13,7 +13,7 @@ public abstract class Entity implements Showable{
 	protected int positionX;
 	protected int positionY;
 
-	public Entity(World world, City owner,Tile tile, int positionX, int positionY) {
+ 	public Entity(World world, City owner,Tile tile, int positionX, int positionY) {
 		this.tile = tile;
 		this.owner=owner;
 		this.world=world;
@@ -35,6 +35,10 @@ public abstract class Entity implements Showable{
 	@Override
 	public int getPositionY() {
 		return positionY;
+	}
+
+	public int distance(int x, int y){
+		return Math.abs(positionX-x)+Math.abs()
 	}
 
 	public City getOwner() {

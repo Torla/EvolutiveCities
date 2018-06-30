@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 public class Match implements Runnable{
 
-	private static final int sleep = 100;
+	private static final int sleep = 10;
 
-	private static final int maxTurn = 300;
+	private static final int maxTurn = 100;
 	Set<City> cities=null;
 
 	public Match(Collection<City> cities) {

@@ -1,10 +1,11 @@
 package evolutiveAutomaton;
 
 import automaton.*;
+import genetic.Evolutive;
 
 import java.util.*;
 
-public class EvolutiveAutomaton extends Automaton{
+public class EvolutiveAutomaton extends Automaton implements Evolutive<EvolutiveAutomaton>{
 	private String name;
 	private AutomatonOutputValues[] outputValues;
 	private static final Random rng= new Random();
@@ -29,6 +30,12 @@ public class EvolutiveAutomaton extends Automaton{
 		}
 		this.setInitialState(states.get(0));
 	}
+
+	@Override
+	public EvolutiveAutomaton copyMutated() {
+		return new EvolutiveAutomaton(outputValues);
+	}
+
 
 	@Override
 	public String toString() {

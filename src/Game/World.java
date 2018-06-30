@@ -32,4 +32,8 @@ public class World {
 		}
 		return ret;
 	}
+
+	public void reset(){
+		entities.clear();
+	}
 }
