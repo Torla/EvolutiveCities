@@ -38,7 +38,7 @@ public abstract class Entity implements Showable{
 	}
 
 	public int distance(int x, int y){
-		return Math.abs(positionX-x)+Math.abs()
+		return Math.abs(positionX-x)+Math.abs(positionY-y);
 	}
 
 	public City getOwner() {

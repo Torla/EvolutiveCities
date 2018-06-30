@@ -10,9 +10,7 @@ import automaton.Automaton;
 import graphics.Showable;
 import graphics.Tile;
 
-import java.io.File;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -28,6 +26,8 @@ public class City {
 
 	private int cursorX;
 	private int cursorY;
+	private int centerX;
+	private int centerY;
 
 	public City(World world,Automaton automaton,int cursorX, int cursorY) {
 		this.world = world;
@@ -36,6 +36,8 @@ public class City {
 		food=Options.startingFood;
 		this.cursorX=cursorX;
 		this.cursorY=cursorY;
+		centerX=cursorX;
+		centerY=cursorY;
 	}
 
 
@@ -46,7 +48,7 @@ public class City {
 				population+=Options.peoplePerHouse;
 			}
 			else if(building instanceof Field){
-				food+=Options.foooFromField;
+				food+=Options.foodFromField;
 			}
 		}
 	}
@@ -145,6 +147,9 @@ public class City {
 		return ret;
 	}
 
+	public boolean tooDistantFromCenter(Building b){
+		return b.distance(centerX,centerY)>Options.maxDistanceFromCenter;
+	}
 	@Override
 	public String toString() {
 		return "p:" + population + " f:" + food + " c:" + cursorX + "," + cursorY + " b:" + world.getEntities().stream().filter(x->x.getOwner()==this).count();
