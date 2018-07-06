@@ -29,20 +29,34 @@ public class Main {
 		out.writeObject(pool);
 		out.close();
 		fileOut.close();
+
+		try {
+			fileOut = new FileOutputStream("poolbackup");
+		}catch (FileNotFoundException e){
+			e.printStackTrace();
+		};
+
+		out = new ObjectOutputStream(fileOut);
+		out.writeObject(pool);
+		out.close();
+		fileOut.close();
 	}
 
-	static private void load(){
+	static private void load() {
 		FileInputStream fileIn = null;
 		ObjectInputStream in = null;
-		try{
-			fileIn= new FileInputStream("pool");
+		try {
+			fileIn = new FileInputStream("pool");
 			in = new ObjectInputStream(fileIn);
 			pool = (Pool<EvolutiveAutomaton>) in.readObject();
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			try {
+				fileIn = new FileInputStream("poolbackup");
+				in = new ObjectInputStream(fileIn);
+				pool = (Pool<EvolutiveAutomaton>) in.readObject();
+			} catch (Exception ex) {
+			}
 		}
-
-
 	}
 	public static void main(String[] args) throws InterruptedException, IOException {
 		World world=new World();
