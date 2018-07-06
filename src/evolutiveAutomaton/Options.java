@@ -1,7 +1,10 @@
 package evolutiveAutomaton;
 
+import city.StackValue;
+
 public class Options {
-	static final int stackValuesNum = 10;
+	private static final int additionStackValues = 10;
+	static final int stackValuesNum = StackValue.values().length + additionStackValues;
 	static final int IntialStateMax = 30;
 	static final int mutation = 10; //per mille
 }

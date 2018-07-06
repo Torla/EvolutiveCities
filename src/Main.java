@@ -65,7 +65,7 @@ public class Main {
 		System.out.println(match.rank().stream().mapToInt(City::getPopulation).average());
 		System.out.println(match.rank().get(0));
 
-		pool.generation(match.rank().stream().map(x -> (EvolutiveAutomaton) x.getAutomaton()).collect(Collectors.toList()), 2, 49);
+		pool.generation(match.rank().stream().map(x -> (EvolutiveAutomaton) x.getAutomaton()).collect(Collectors.toList()), 10, 9);
 		save();
 	}
 	}

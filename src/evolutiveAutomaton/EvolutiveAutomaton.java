@@ -49,18 +49,18 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 			for(int i=0;i<Options.stackValuesNum;i++){
 				if(fate(Options.mutation)){
 					LinkedList<State> l = new LinkedList<>(getStates());
-					try {
-						newState.addEdge(i, new Edge(l.get(rng.nextInt(l.size())),
-								StackAction.values()[rng.nextInt(StackAction.values().length)],
-								rng.nextInt(),
-								outputValues[rng.nextInt(outputValues.length)]));
-					}catch (NullPointerException e ){
-						e.printStackTrace();
-					}
+					newState.addEdge(i, new Edge(l.get(rng.nextInt(l.size())),
+							StackAction.values()[rng.nextInt(StackAction.values().length)],
+							rng.nextInt(Options.stackValuesNum),
+							outputValues[rng.nextInt(outputValues.length)]));
 				}
 				else newState.addEdge(i,new Edge(state.getEdge(i).getToState(),state.getEdge(i).getStackAction(),state.getEdge(i).getStackValue(),state.getEdge(i).getOutput()));
 			}
 			auto.addState(newState);
+		}
+		if(fate(Options.mutation)){ //todo fix
+			State initialStat = new ArrayList<State>(auto.getStates()).get(rng.nextInt(auto.getStates().size()));
+			auto.setInitialState(initialStat);
 		}
 		return auto;
 	}

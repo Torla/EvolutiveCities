@@ -76,16 +76,36 @@ public class City {
 			case NULL:
 				break;
 			case CURSOR_NORD:
+				if(tooDistantFromCenter(cursorX,cursorY-1)) {
+					automaton.stackPush(StackValue.EXIT_NORTH.ordinal());
+					break;
+				}
 				cursorY--;
+
 				break;
 			case CURSOR_SUD:
+				if(tooDistantFromCenter(cursorX,cursorY+1)){
+					automaton.stackPush(StackValue.EXIT_SUD.ordinal());
+					break;
+				}
 				cursorY++;
+
 				break;
 			case CURSOR_EST:
+				if(tooDistantFromCenter(cursorX+1,cursorY)){
+					automaton.stackPush(StackValue.EXIT_EST.ordinal());
+					break;
+				}
 				cursorX++;
+
 				break;
 			case CURSOR_WEST:
+				if(tooDistantFromCenter(cursorX+1,cursorY)){
+					automaton.stackPush(StackValue.EXIT_WEST.ordinal());
+					break;
+				}
 				cursorX--;
+
 				break;
 			case BUILD_HOUSE:
 				new House(world,this,cursorX,cursorY);
@@ -147,8 +167,8 @@ public class City {
 		return ret;
 	}
 
-	public boolean tooDistantFromCenter(Building b){
-		return b.distance(centerX,centerY)>Options.maxDistanceFromCenter;
+	public boolean tooDistantFromCenter(int x, int y){
+		return Math.abs(x-centerX)> Options.maxDistanceFromCenter ||  Math.abs(y-centerY) > Options.maxDistanceFromCenter;
 	}
 	@Override
 	public String toString() {
