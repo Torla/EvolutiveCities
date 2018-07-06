@@ -1,20 +1,18 @@
 package Game;
 
-import Game.World;
+
 import city.City;
 import graphics.Showable;
-import graphics.Tile;
 
-import java.text.CharacterIterator;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Match implements Runnable{
 
 	private static final int sleep = 0;
-
 	private static final int maxTurn = 200;
-	Set<City> cities=null;
+
+	private Set<City> cities=null;
 
 	public Match(Collection<City> cities) {
 		this.cities = new HashSet<>(cities);
@@ -39,7 +37,12 @@ public class Match implements Runnable{
 	}
 
 	public List<City> rank(){
-		return cities.stream().sorted((y,x)->Integer.compare(x.getPopulation(),y.getPopulation())).collect(Collectors.toList());
+		return cities.stream()
+				.sorted(Comparator.comparingInt(City::getPopulation)
+						.thenComparingInt(City::getFood)
+						.thenComparingLong(x->x.getWorld().getEntities().stream().filter(y->y.getOwner()==x).count())
+						.reversed())
+				.collect(Collectors.toList());
 	}
 
 	public Set<Showable> getShowable(){

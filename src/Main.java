@@ -8,27 +8,37 @@ import graphics.Graphics;
 import Game.Match;
 
 import java.io.*;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 public class Main {
 
 	static Pool<EvolutiveAutomaton> pool = new Pool<>();
+	static final Lock poolLock = new ReentrantLock();
 
 
-	static private void save() throws IOException {
+	static private void save(){
 		FileOutputStream fileOut=null;
+		ObjectOutputStream out;
+
 		try {
 			fileOut = new FileOutputStream("pool");
 		}catch (FileNotFoundException e){
 			e.printStackTrace();
 		};
 
-		ObjectOutputStream out = new ObjectOutputStream(fileOut);
-		out.writeObject(pool);
-		out.close();
-		fileOut.close();
+		try {
+			out = new ObjectOutputStream(fileOut);
+			out.writeObject(pool);
+			out.close();
+			fileOut.close();
+		}catch (IOException e){
+			e.printStackTrace();
+		}
 
 		try {
 			fileOut = new FileOutputStream("poolbackup");
@@ -36,10 +46,14 @@ public class Main {
 			e.printStackTrace();
 		};
 
-		out = new ObjectOutputStream(fileOut);
-		out.writeObject(pool);
-		out.close();
-		fileOut.close();
+		try {
+			out = new ObjectOutputStream(fileOut);
+			out.writeObject(pool);
+			out.close();
+			fileOut.close();
+		}catch (IOException e){
+			e.printStackTrace();
+		}
 	}
 
 	static private void load() {
@@ -51,10 +65,12 @@ public class Main {
 			pool = (Pool<EvolutiveAutomaton>) in.readObject();
 		} catch (IOException | ClassNotFoundException e) {
 			try {
+				e.printStackTrace();
 				fileIn = new FileInputStream("poolbackup");
 				in = new ObjectInputStream(fileIn);
 				pool = (Pool<EvolutiveAutomaton>) in.readObject();
 			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
 		}
 	}
@@ -66,6 +82,27 @@ public class Main {
 		for (int i = 0; i < 100; i++) pool.add(new EvolutiveAutomaton(Action.values()));
 
 		load();
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while(true) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					System.out.println("Saved!");
+					poolLock.lock();
+					try {
+						save();
+					}
+					finally {
+						poolLock.unlock();
+					}
+				}
+			}
+		}).start(); //save routine
 	while(true) {
 
 
@@ -86,12 +123,15 @@ public class Main {
 		t.join();
 
 
-		System.out.println(match.rank().get(0).getPopulation());
 		System.out.println(match.rank().stream().mapToInt(City::getPopulation).average());
 		System.out.println(match.rank().get(0));
-
-		pool.generation(match.rank().stream().map(x -> (EvolutiveAutomaton) x.getAutomaton()).collect(Collectors.toList()), 10, 9);
-		save();
+		System.out.println(match.rank().stream().mapToInt(x->((EvolutiveAutomaton)x.getAutomaton()).getGeneration()).max().getAsInt());
+		try {
+			poolLock.lock();
+			pool.generation(match.rank().stream().map(x -> (EvolutiveAutomaton) x.getAutomaton()).collect(Collectors.toList()), 10, 9);
+		} finally {
+			poolLock.unlock();
+		}
 	}
 	}
 

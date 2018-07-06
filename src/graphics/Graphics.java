@@ -61,7 +61,7 @@ public class Graphics implements Runnable {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			}catch (NullPointerException e){e.printStackTrace();}
+			}catch (NullPointerException e){}
 		}
 	}
 }

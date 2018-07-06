@@ -7,10 +7,18 @@ import java.util.*;
 
 public class EvolutiveAutomaton extends Automaton implements Evolutive<EvolutiveAutomaton>{
 	private String name;
+	private int generation;
 	private AutomatonOutputValues[] outputValues;
 	private static final Random rng= new Random();
+
+
+	public int getGeneration() {
+		return generation;
+	}
+
 	public EvolutiveAutomaton(AutomatonOutputValues values[]) {
 		super();
+		generation=0;
 		outputValues = values;
 		int numState = rng.nextInt(Options.IntialStateMax) + 1;
 		List<State> states = new ArrayList<>();
@@ -43,6 +51,7 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 	@Override
 	public EvolutiveAutomaton copyMutated() {
 		EvolutiveAutomaton auto = new EvolutiveAutomaton(this);
+		auto.generation=this.generation+1;
 		for(State state:this.getStates()){
 			State newState = new State();
 			for(int i=0;i<Options.stackValuesNum;i++){
@@ -57,12 +66,13 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 			}
 			auto.addState(newState);
 		}
-		if(fate(Options.mutation)){ //todo fix
+		if(fate(Options.mutation)){ //todo  check if fixed fix
 			State initialStat = new ArrayList<State>(auto.getStates()).get(rng.nextInt(auto.getStates().size()));
 			auto.setInitialState(initialStat);
 		}
 		return auto;
 	}
+
 
 
 	@Override
