@@ -8,14 +8,15 @@ import graphics.Graphics;
 import Game.Match;
 
 import java.io.*;
-import java.util.Comparator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 public class Main {
+
+	private static final int threadNum = 4;
+	private static Thread[] threadPool = new Thread[threadNum];
 
 	static Pool<EvolutiveAutomaton> pool = new Pool<>();
 	static final Lock poolLock = new ReentrantLock();
@@ -88,11 +89,10 @@ public class Main {
 			public void run() {
 				while(true) {
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(60000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					System.out.println("Saved!");
 					poolLock.lock();
 					try {
 						save();
@@ -103,36 +103,17 @@ public class Main {
 				}
 			}
 		}).start(); //save routine
-	while(true) {
 
-
-		world.reset();
-
-
-		LinkedList<City> c = new LinkedList<>();
-		int i = 0;
- 		for (Automaton automaton : pool.getPop(100)) {
-			c.add(new City(world, automaton, 20 * (i%4), 20 * (i/4)));
-			i++;
+		threadPool[0]=new Thread(new Cicle(world));
+		for(int i=1;i<threadNum;i++){
+			threadPool[i]=new Thread(new Cicle(new World()));
 		}
-		Match match = new Match(c);
-		Graphics.setMatch(match);
-
-		Thread t = new Thread(match);
-		t.start();
-		t.join();
-
-
-		System.out.println(match.rank().stream().mapToInt(City::getPopulation).average());
-		System.out.println(match.rank().get(0));
-		System.out.println(match.rank().stream().mapToInt(x->((EvolutiveAutomaton)x.getAutomaton()).getGeneration()).max().getAsInt());
-		try {
-			poolLock.lock();
-			pool.generation(match.rank().stream().map(x -> (EvolutiveAutomaton) x.getAutomaton()).collect(Collectors.toList()), 10, 9);
-		} finally {
-			poolLock.unlock();
+		for(int i=0;i<threadNum;i++){
+			threadPool[i].start();
 		}
+		return;
 	}
-	}
+
+
 
 }
