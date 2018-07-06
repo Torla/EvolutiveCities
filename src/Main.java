@@ -7,10 +7,7 @@ import genetic.Pool;
 import graphics.Graphics;
 import Game.Match;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +31,19 @@ public class Main {
 		fileOut.close();
 	}
 
+	static private void load(){
+		FileInputStream fileIn = null;
+		ObjectInputStream in = null;
+		try{
+			fileIn= new FileInputStream("pool");
+			in = new ObjectInputStream(fileIn);
+			pool = (Pool<EvolutiveAutomaton>) in.readObject();
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+
+	}
 	public static void main(String[] args) throws InterruptedException, IOException {
 		World world=new World();
 		Graphics.setWorld(world);
@@ -41,6 +51,7 @@ public class Main {
 
 		for (int i = 0; i < 100; i++) pool.add(new EvolutiveAutomaton(Action.values()));
 
+		load();
 	while(true) {
 
 

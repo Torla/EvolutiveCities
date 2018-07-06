@@ -3,7 +3,6 @@ package evolutiveAutomaton;
 import automaton.*;
 import genetic.Evolutive;
 
-import java.io.OutputStream;
 import java.util.*;
 
 public class EvolutiveAutomaton extends Automaton implements Evolutive<EvolutiveAutomaton>{
