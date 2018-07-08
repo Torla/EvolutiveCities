@@ -84,6 +84,7 @@ public class Main {
 
 		load();
 
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

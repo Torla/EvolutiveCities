@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class Match implements Runnable{
 
 	private static final int sleep = 0;
-	private static final int maxTurn = 200;
+	private static final int maxTurn = 500;
 
 	private Set<City> cities=null;
 

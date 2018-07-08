@@ -5,6 +5,7 @@ import Entity.building.Building;
 import Entity.building.Field;
 import Entity.building.House;
 import Entity.building.Keep;
+import Entity.pathFinder.PathFinder;
 import Game.World;
 import automaton.Automaton;
 import graphics.Showable;
@@ -122,7 +123,6 @@ public class City {
 
 	public void turn(){
 		production();
-
 		upkeep();
 		Action action;
 		action=(Action) automaton.next();
