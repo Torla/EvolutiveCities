@@ -12,8 +12,8 @@ public class Building extends Entity {
 	private int traverseCost;
 
 
-	Building(World world, City owner, Tile tile, int positionX, int positionY, int traverseCost) {
-		super(world,owner,tile, positionX, positionY);
+	Building(World world, City owner, Tile tile, int positionX, int positionY, int traverseCost, int life) {
+		super(world,owner,tile, positionX, positionY, life);
 
 		this.traverseCost=traverseCost;
 

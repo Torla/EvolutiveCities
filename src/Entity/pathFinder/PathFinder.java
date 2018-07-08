@@ -18,6 +18,7 @@ public class PathFinder {
 	static private LinkedList<Position> naiveDirectionToNearest(City owner, int x, int y){
 		LinkedList<Position> ret = new LinkedList<>();
 		Optional<Position> toOp = owner.getWorld().getEntities().stream()
+				.filter(c->c.getOwner()!=owner)
 				.map(a->new Position(a.getPositionX(),a.getPositionY()))
 				.min(Comparator.comparingInt(b->manhattanDistance(b.x,b.y,x,y)));
 		if(!toOp.isPresent()) return null;
@@ -30,6 +31,7 @@ public class PathFinder {
 		}
 		return ret;
 	}
+
 	static public LinkedList<Position> pathToNearestEnemy(City owner, int x, int y){
 
 
@@ -40,6 +42,7 @@ public class PathFinder {
 		}
 
 		Map<Position,Integer> cost = owner.getWorld().getEntities().stream()
+				.filter(c->c.getOwner()!=owner)
 				.filter(a->a instanceof Building)
 				.filter(a->manhattanDistance(a.getPositionX(),a.getPositionY(),x,y)<=maxDistance)
 				.map(d->(Building) d)
@@ -76,6 +79,7 @@ public class PathFinder {
 		}
 
 		Position nearest = owner.getWorld().getEntities().stream()
+				.filter(c->c.getOwner()!=owner)
 				.filter(a -> manhattanDistance(a.getPositionX(), a.getPositionY(), x, y) <= maxDistance)
 				.map(a -> new Position(a.getPositionX(), a.getPositionY())).min(Comparator.comparingInt(distanceMap::get)).get();
 

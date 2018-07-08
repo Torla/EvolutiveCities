@@ -1,6 +1,7 @@
 import Entity.building.House;
 import Entity.building.Keep;
 import Entity.pathFinder.PathFinder;
+import Entity.unity.Soldier;
 import Game.World;
 import automaton.Automaton;
 import city.City;
@@ -15,6 +16,8 @@ public class Test {
 		new House(world,city,0,2);
 		new House(world,city,0,3);
 		new House(world,city,41,40);
-		System.out.println(PathFinder.pathToNearestEnemy(new City(world,new Automaton(),0,0),0,0));
+		City city1 = new City(world,new Automaton(),0,0);
+		new Soldier(world,city1,0,0);
+		System.out.println(PathFinder.pathToNearestEnemy(city1,0,0));
 	}
 }

@@ -1,6 +1,7 @@
 package Game;
 
 import Entity.Entity;
+import Entity.building.Building;
 import graphics.Showable;
 
 import java.util.ConcurrentModificationException;
@@ -35,5 +36,14 @@ public class World {
 
 	public void reset(){
 		entities.clear();
+	}
+
+	public int traverseCost(int x, int y){
+		int ret=1;
+		ret+=entities.stream()
+				.filter(b->b instanceof Building).map(c->(Building) c)
+				.filter(a->a.getPositionY()==y && a.getPositionX()==x)
+				.mapToInt(d->d.getTraverseCost()).sum();
+		return ret;
 	}
 }

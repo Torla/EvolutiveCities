@@ -13,7 +13,9 @@ public abstract class Entity implements Showable{
 	protected int positionX;
 	protected int positionY;
 
- 	public Entity(World world, City owner,Tile tile, int positionX, int positionY) {
+	protected int life;
+
+ 	public Entity(World world, City owner, Tile tile, int positionX, int positionY, int life) {
 		this.tile = tile;
 		this.owner=owner;
 		this.world=world;
@@ -43,6 +45,11 @@ public abstract class Entity implements Showable{
 
 	public City getOwner() {
 		return owner;
+	}
+
+	public void attack(int power){
+		life-=power;
+		if(life<=0) destroy();
 	}
 
 	public void destroy(){
