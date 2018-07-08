@@ -37,6 +37,7 @@ public class PathFinder {
 
 		if(owner.getWorld().getEntities().stream()
 				.filter(a -> manhattanDistance(a.getPositionX(), a.getPositionY(), x, y) <= maxDistance)
+				.filter(c->c.getOwner()!=owner)
 				.map(a -> new Position(a.getPositionX(), a.getPositionY())).count()==0) {
 		 return naiveDirectionToNearest(owner,x,y);
 		}

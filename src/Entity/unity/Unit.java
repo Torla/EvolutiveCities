@@ -25,22 +25,26 @@ public class Unit extends Entity{
 		this.power=power;
 	}
 
-	void turn(){
+	public void turn(){
 		Optional<Entity> op= owner.getWorld().getEntities().stream()
+				.filter(c->c.getOwner()!=owner)
 				.filter(x->x.getPositionX()==positionX && x.getPositionY()==positionY).findAny();
 		if(op.isPresent()){
 			op.get().attack(power);
+			path=null;
 		}
 		else{
 			movPoint+=movVelocity;
 			if(path==null) {
 				path = PathFinder.pathToNearestEnemy(this.owner, positionX, positionY);
 			}
+			if(path==null) return;
 			if(movPoint>=owner.getWorld().traverseCost(path.peek().x,path.peek().y)){
 				movPoint-=owner.getWorld().traverseCost(path.peek().x,path.peek().y);
 				positionX=path.peek().x;
 				positionY=path.peek().y;
 				path.pop();
+				if(path.size()==0) path=null;
 			}
 
 		}
