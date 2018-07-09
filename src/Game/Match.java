@@ -10,7 +10,24 @@ import java.util.stream.Collectors;
 
 public class Match implements Runnable{
 
-	private static final int sleep = 0;
+	public void setCities(Set<City> cities) {
+		this.cities = cities;
+	}
+
+
+	private static  int sleep = 0;
+
+
+	public static int getSleep() {
+
+		return sleep;
+	}
+
+	public static void setSleep(int sleep) {
+
+		Match.sleep = sleep>=0?sleep:0;
+	}
+
 	private static final int maxTurn = 500;
 
 	private Set<City> cities=null;

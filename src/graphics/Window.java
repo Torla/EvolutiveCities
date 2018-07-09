@@ -1,5 +1,7 @@
 package graphics;
 
+import Game.Match;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -42,6 +44,13 @@ public class Window extends Frame implements KeyListener,WindowListener{
 			case KeyEvent.VK_RIGHT :
 				Graphics.moveScreen(1,0);
 				break;
+			case KeyEvent.VK_PAGE_UP:
+				Match.setSleep(Match.getSleep()+100);
+				break;
+			case  KeyEvent.VK_PAGE_DOWN:
+				Match.setSleep(Match.getSleep()-100);
+			default:
+				System.out.println(keyCode);
 		}
 	}
 	@Override
