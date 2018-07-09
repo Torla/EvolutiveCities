@@ -7,5 +7,6 @@ public class Options {
 	static final int stackValuesNum = StackValue.values().length + additionStackValues;
 	static final int stateMaxNum = 1000;
 	static final int initialStateMaxNum = 50;
-	static final int mutation = 500; //per mille
+	static final int startingMutation = 500; //per mille
+	static final int mutationChange = 10; //per mille
 }

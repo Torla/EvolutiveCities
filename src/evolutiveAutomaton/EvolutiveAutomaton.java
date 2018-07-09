@@ -7,6 +7,7 @@ import java.util.*;
 
 public class EvolutiveAutomaton extends Automaton implements Evolutive<EvolutiveAutomaton>{
 	private String name;
+	private int mutation=Options.startingMutation;
 	private int generation;
 	private AutomatonOutputValues[] outputValues;
 	private static final Random rng= new Random();
@@ -47,14 +48,20 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 	private boolean fate(int n){
 		return rng.nextInt(1000)<n;
 	}
+
+	public int getMutation() {
+		return mutation;
+	}
+
 	@Override
 	public EvolutiveAutomaton copyMutated() { //todo fix state creep
 		EvolutiveAutomaton auto = new EvolutiveAutomaton(this);
 		auto.generation=this.generation+1;
+		auto.mutation=this.mutation+rng.nextInt(Options.mutationChange*2)-Options.mutationChange;
 		for(State state:this.getStates()){
 			State newState = new State();
 			for(int i=0;i<Options.stackValuesNum;i++){
-				if(fate(Options.mutation)){
+				if(fate(Options.startingMutation)){
 					LinkedList<State> l = new LinkedList<>(getStates());
 					newState.addEdge(i, new Edge(l.get(rng.nextInt(l.size())),
 							StackAction.values()[rng.nextInt(StackAction.values().length)],
@@ -68,7 +75,7 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 			}
 			auto.addState(newState);
 		}
-		if(auto.getStates().size()<Options.stateMaxNum && fate(Options.mutation)){
+		if(auto.getStates().size()<Options.stateMaxNum && fate(Options.startingMutation)){
 			State newState = new State();
 			for(int i=0;i<Options.stackValuesNum;i++) {
 				LinkedList<State> l = new LinkedList<>(getStates());
@@ -79,11 +86,11 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 			}
 			auto.addState(newState);
 		}
-		if(fate(Options.mutation)){
+		if(fate(Options.startingMutation)){
 			State initialStat = new ArrayList<State>(auto.getStates()).get(rng.nextInt(auto.getStates().size()));
 			auto.setInitialState(initialStat);
 		}
-		if(fate(Options.mutation)){
+		if(fate(Options.startingMutation)){
 			auto.removeState(new ArrayList<State>(auto.getStates()).get(rng.nextInt(auto.getStates().size())));
 		}
 		return auto;
