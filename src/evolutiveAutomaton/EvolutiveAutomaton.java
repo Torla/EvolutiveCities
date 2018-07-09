@@ -20,7 +20,7 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 		super();
 		generation=0;
 		outputValues = values;
-		int numState = rng.nextInt(Options.stateMaxNum) + 1;
+		int numState = rng.nextInt(Options.initialStateMaxNum) + 1;
 		List<State> states = new ArrayList<>();
 		for (int i = 0; i < numState; i++) {
 			states.add(new State());
@@ -82,6 +82,9 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 		if(fate(Options.mutation)){
 			State initialStat = new ArrayList<State>(auto.getStates()).get(rng.nextInt(auto.getStates().size()));
 			auto.setInitialState(initialStat);
+		}
+		if(fate(Options.mutation)){
+			auto.removeState(new ArrayList<State>(auto.getStates()).get(rng.nextInt(auto.getStates().size())));
 		}
 		return auto;
 	}

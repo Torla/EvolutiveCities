@@ -31,6 +31,22 @@ public class Edge implements Serializable{
 		return output;
 	}
 
+	public void setToState(State toState) {
+		this.toState = toState;
+	}
+
+	public void setStackAction(StackAction stackAction) {
+		this.stackAction = stackAction;
+	}
+
+	public void setStackValue(int stackValue) {
+		this.stackValue = stackValue;
+	}
+
+	public void setOutput(AutomatonOutputValues output) {
+		this.output = output;
+	}
+
 	@Override
 	public String toString() {
 		return "(" + toState.getID() + "," + stackAction + "," + stackValue + "," + output  + ")";

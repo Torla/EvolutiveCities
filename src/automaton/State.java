@@ -28,7 +28,11 @@ public class State implements Serializable{
 		return ID;
 	}
 
-	public void addEdge(Integer stackTop,Edge edge){
+	public Map<Integer, Edge> getEdgeMap() {
+		return edgeMap;
+	}
+
+	public void addEdge(Integer stackTop, Edge edge){
 		edgeMap.put(stackTop,edge);
 	}
 

@@ -45,7 +45,7 @@ class Cicle implements Runnable {
 
 			//System.out.println(match.rank().get(0));
 			//System.out.println(match.rank().stream().mapToInt(x -> ((EvolutiveAutomaton) x.getAutomaton()).getGeneration()).max().getAsInt());
-			System.out.println(Main.pool.getPop().stream().mapToDouble(x->(double) x.getUsedStates().size()).average());
+			System.out.println(match.rank().stream().map(City::getAutomaton).mapToDouble(x->x.getStates().size()).average());
 			try {
 				Main.poolLock.lock();
 				Main.pool.generation(match.rank().stream().map(x -> (EvolutiveAutomaton) x.getAutomaton()).collect(Collectors.toList()), 1, 1);

@@ -21,6 +21,14 @@ public class Automaton implements Serializable {
 		states.add(state);
 	}
 
+	public void removeState(State state){ // redirect edges to the initialState
+		if(state==initialState) return; //not possible to delete initial state
+		states.stream()
+				.flatMap(x->x.getEdgeMap().values().stream())
+				.filter(x->x.getToState()==state)
+				.forEach(x->x.setToState(initialState));
+	}
+
 	public void setInitialState(State initialState) {
 			addState(initialState);
 			this.initialState=initialState;
