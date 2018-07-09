@@ -20,7 +20,7 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 		super();
 		generation=0;
 		outputValues = values;
-		int numState = rng.nextInt(Options.IntialStateMax) + 1;
+		int numState = rng.nextInt(Options.stateMaxNum) + 1;
 		List<State> states = new ArrayList<>();
 		for (int i = 0; i < numState; i++) {
 			states.add(new State());
@@ -41,7 +41,6 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 	}
 
 	public EvolutiveAutomaton(EvolutiveAutomaton evolutiveAutomaton){
-		this.setInitialState(evolutiveAutomaton.getInitialState());
 		this.outputValues=evolutiveAutomaton.outputValues;
 	}
 
@@ -49,7 +48,7 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 		return rng.nextInt(1000)<n;
 	}
 	@Override
-	public EvolutiveAutomaton copyMutated() {
+	public EvolutiveAutomaton copyMutated() { //todo fix state creep
 		EvolutiveAutomaton auto = new EvolutiveAutomaton(this);
 		auto.generation=this.generation+1;
 		for(State state:this.getStates()){
@@ -64,9 +63,23 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 				}
 				else newState.addEdge(i,new Edge(state.getEdge(i).getToState(),state.getEdge(i).getStackAction(),state.getEdge(i).getStackValue(),state.getEdge(i).getOutput()));
 			}
+			if(state==this.getInitialState()){
+				auto.setInitialState(newState);
+			}
 			auto.addState(newState);
 		}
-		if(fate(Options.mutation)){ //todo  check if fixed fix
+		if(auto.getStates().size()<Options.stateMaxNum && fate(Options.mutation)){
+			State newState = new State();
+			for(int i=0;i<Options.stackValuesNum;i++) {
+				LinkedList<State> l = new LinkedList<>(getStates());
+				newState.addEdge(i, new Edge(l.get(rng.nextInt(l.size())),
+						StackAction.values()[rng.nextInt(StackAction.values().length)],
+						rng.nextInt(Options.stackValuesNum),
+						outputValues[rng.nextInt(outputValues.length)]));
+			}
+			auto.addState(newState);
+		}
+		if(fate(Options.mutation)){
 			State initialStat = new ArrayList<State>(auto.getStates()).get(rng.nextInt(auto.getStates().size()));
 			auto.setInitialState(initialStat);
 		}

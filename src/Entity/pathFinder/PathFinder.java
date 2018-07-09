@@ -104,7 +104,7 @@ public class PathFinder {
 		return path;
 	}
 
-	private static int manhattanDistance(int x1,int y1,int x2,int y2){
+	public static int manhattanDistance(int x1,int y1,int x2,int y2){
 		return Math.abs(x1-x2)+Math.abs(y2-y1);
 	}
 

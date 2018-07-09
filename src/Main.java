@@ -74,6 +74,7 @@ public class Main {
 				ex.printStackTrace();
 			}
 		}
+		pool.resetUsed();
 	}
 	public static void main(String[] args) throws InterruptedException, IOException {
 		World world=new World();

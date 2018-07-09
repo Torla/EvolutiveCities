@@ -29,11 +29,12 @@ class Cicle implements Runnable {
 			final Collection<EvolutiveAutomaton> pop;
 			try {
 				Main.poolLock.lock();
-				pop = Main.pool.getPop(4);
+				pop = Main.pool.getPop(2);
 			}finally {
 				Main.poolLock.unlock();
 			}
 			for (Automaton automaton : pop) {
+				automaton.reset();
 				c.add(new City(world, automaton, 20 * (i % 2) + 10, 20 * (i / 2) + 10));
 				i++;
 			}
@@ -42,12 +43,12 @@ class Cicle implements Runnable {
 
 			match.run();
 
-			System.out.println(match.rank().stream().mapToInt(City::getPopulation).average());
-			System.out.println(match.rank().get(0));
-			System.out.println(match.rank().stream().mapToInt(x -> ((EvolutiveAutomaton) x.getAutomaton()).getGeneration()).max().getAsInt());
+			//System.out.println(match.rank().get(0));
+			//System.out.println(match.rank().stream().mapToInt(x -> ((EvolutiveAutomaton) x.getAutomaton()).getGeneration()).max().getAsInt());
+			System.out.println(Main.pool.getPop().stream().mapToDouble(x->(double) x.getUsedStates().size()).average());
 			try {
 				Main.poolLock.lock();
-				Main.pool.generation(match.rank().stream().map(x -> (EvolutiveAutomaton) x.getAutomaton()).collect(Collectors.toList()), 2, 1);
+				Main.pool.generation(match.rank().stream().map(x -> (EvolutiveAutomaton) x.getAutomaton()).collect(Collectors.toList()), 1, 1);
 			} finally {
 				Main.poolLock.unlock();
 			}

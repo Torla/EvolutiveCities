@@ -1,17 +1,18 @@
 package city;
 
 import Entity.Entity;
-import Entity.building.Building;
-import Entity.building.Field;
-import Entity.building.House;
-import Entity.building.Keep;
+import Entity.building.*;
 import Entity.pathFinder.PathFinder;
+import Entity.unity.Soldier;
+import Entity.unity.Unit;
 import Game.World;
 import automaton.Automaton;
 import graphics.Showable;
 import graphics.Tile;
 
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,11 @@ public class City {
 				freeWorkers -= Options.workerPerFiled;
 			} else if (entity instanceof Keep) {
 				freeWorkers -= Options.workerPerKepp;
+			}else if(entity instanceof Soldier){
+				freeWorkers-=Options.workerPerSoldier;
+				food-=Options.foodPerSoldier;
+			}else if(entity instanceof Wall){
+				freeWorkers-=Options.workerPerWall;
 			}
 			if (food < 0 || freeWorkers < 0) {
 				entity.destroy();
@@ -117,6 +123,19 @@ public class City {
 			case BUILD_KEEP:
 				new Keep(world,this,cursorX,cursorY);
 				break;
+			case BUILD_WALL:
+				new Wall(world,this,cursorX,cursorY);
+				break;
+			case PRODUCE_SOLDIER:
+				Optional<Keep> op = world.getEntities().stream()
+					.filter(x->x.getOwner()==this)
+					.filter(x->x instanceof Keep)
+					.map(x->(Keep)x)
+					.min(Comparator.comparingInt(x->PathFinder.manhattanDistance(x.getPositionX(),x.getPositionY(),cursorX,centerY)));
+				if(op.isPresent()) {
+					new Soldier(world, this, op.get().getPositionX(), op.get().getPositionY());
+				}
+				break;
 		}
 	}
 
@@ -125,6 +144,9 @@ public class City {
 		production();
 		upkeep();
 		Action action;
+		for(Unit unit:world.getEntities().stream().filter(x-> x instanceof Unit).map(x->(Unit) x).collect(Collectors.toList())){
+			unit.turn();
+		};
 		action=(Action) automaton.next();
 		perform(action);
 	};
@@ -172,6 +194,11 @@ public class City {
 	}
 	@Override
 	public String toString() {
-		return "p:" + population + " f:" + food + " c:" + cursorX + "," + cursorY + " b:" + world.getEntities().stream().filter(x->x.getOwner()==this).count();
+		return "p:"
+				+ population
+				+ " f:" + food
+				+ " c:" + cursorX + "," + cursorY
+				+ " b:" + world.getEntities().stream().filter(x->x.getOwner()==this).filter(x->x instanceof Building).count()
+				+ " u:" + world.getEntities().stream().filter(x->x.getOwner()==this).filter(x->x instanceof Unit).count();
 	}
 }

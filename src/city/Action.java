@@ -10,7 +10,9 @@ public enum Action implements AutomatonOutputValues{
 	CURSOR_WEST,
 	BUILD_HOUSE,
 	BUILD_FIELD,
-	BUILD_KEEP;
+	BUILD_KEEP,
+	BUILD_WALL,
+	PRODUCE_SOLDIER;
 
 	@Override
 	public AutomatonOutputValues getValue(int n) {

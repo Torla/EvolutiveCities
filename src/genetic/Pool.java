@@ -33,4 +33,16 @@ public class Pool<E extends Evolutive> implements Serializable{
 			}
 		}
 	}
+
+	public  int getPopSize(){
+		return evolutives.size();
+	}
+	public Set<E> getPop(){
+		return evolutives;
+	}
+
+	public void resetUsed(){
+		beingUsed.clear();
+	}
+
 }

@@ -14,6 +14,8 @@ public class Automaton implements Serializable {
 	private State currentState;
 	private Stack<Integer> stack = new Stack<>();
 
+	transient private Set<State> usedStates = new HashSet<>();
+
 	public void addState(State state){
 		state.setID(states.size());
 		states.add(state);
@@ -42,6 +44,9 @@ public class Automaton implements Serializable {
 
 	public AutomatonOutputValues next(){
 		Edge edge;
+
+		usedStates.add(currentState);
+
 		try {
 			edge = currentState.getEdge(stack.peek());
 		}catch (EmptyStackException e){
@@ -62,9 +67,16 @@ public class Automaton implements Serializable {
 		stack.push(x);
 	}
 
+
 	public void reset(){
 		currentState=initialState;
 		stack.clear();
+
+		usedStates = new HashSet<>();
+	}
+
+	public Set<State> getUsedStates() {
+		return usedStates;
 	}
 
 	@Override
