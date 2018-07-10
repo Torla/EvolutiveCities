@@ -44,6 +44,6 @@ public class World {
 				.filter(b->b instanceof Building).map(c->(Building) c)
 				.filter(a->a.getPositionY()==y && a.getPositionX()==x)
 				.mapToInt(d->d.getTraverseCost()).sum();
-		return ret;
+		return ret*10;
 	}
 }

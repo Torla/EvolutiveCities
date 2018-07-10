@@ -48,12 +48,12 @@ public class Graphics implements Runnable {
 						) {
 					window.setTile(x.getTile(), x.getPositionX() - screenPosX, x.getPositionY() - screenPosY);
 				}
-				for (Showable x : match.getShowable().stream()
+				/*for (Showable x : match.getShowable().stream()
 						.filter(x -> x.getPositionX() >= screenPosX && x.getPositionX() < screenPosX + Options.screenTilesW && x.getPositionY() > screenPosY && x.getPositionY() < screenPosY + Options.screenTilesH)
 						.collect(Collectors.toList())
 						) {
 					window.setTile(x.getTile(), x.getPositionX() - screenPosX, x.getPositionY() - screenPosY);
-				}
+				}*/
 				window.repaint();
 				try {
 					Thread.sleep(1000 / Options.frameRate - (System.currentTimeMillis() - time));

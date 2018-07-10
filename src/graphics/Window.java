@@ -45,10 +45,10 @@ public class Window extends Frame implements KeyListener,WindowListener{
 				Graphics.moveScreen(1,0);
 				break;
 			case KeyEvent.VK_PAGE_UP:
-				Match.setSleep(Match.getSleep()+100);
+				Match.setSleep(Match.getSleep()+50);
 				break;
 			case  KeyEvent.VK_PAGE_DOWN:
-				Match.setSleep(Match.getSleep()-100);
+				Match.setSleep(Match.getSleep()-50);
 			default:
 				System.out.println(keyCode);
 		}

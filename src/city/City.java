@@ -131,7 +131,7 @@ public class City {
 					.filter(x->x.getOwner()==this)
 					.filter(x->x instanceof Keep)
 					.map(x->(Keep)x)
-					.min(Comparator.comparingInt(x->PathFinder.manhattanDistance(x.getPositionX(),x.getPositionY(),cursorX,centerY)));
+					.min(Comparator.comparingInt(x->PathFinder.manhattanDistance(x.getPositionX(),x.getPositionY(), cursorX, centerY)));
 				if(op.isPresent()) {
 					new Soldier(world, this, op.get().getPositionX(), op.get().getPositionY());
 				}
@@ -192,6 +192,16 @@ public class City {
 	public boolean tooDistantFromCenter(int x, int y){
 		return Math.abs(x-centerX)> Options.maxDistanceFromCenter ||  Math.abs(y-centerY) > Options.maxDistanceFromCenter;
 	}
+
+
+	public int getCursorX() {
+		return cursorX;
+	}
+
+	public int getCursorY() {
+		return cursorY;
+	}
+
 	@Override
 	public String toString() {
 		return "p:"

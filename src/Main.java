@@ -81,7 +81,7 @@ public class Main {
 		Graphics.setWorld(world);
 		Graphics.start();
 
-		for (int i = 0; i < 100; i++) pool.add(new EvolutiveAutomaton(Action.values()));
+		for (int i = 0; i < 1000; i++) pool.add(new EvolutiveAutomaton(Action.values()));
 
 		load();
 
@@ -91,7 +91,7 @@ public class Main {
 			public void run() {
 				while(true) {
 					try {
-						Thread.sleep(60000);
+						Thread.sleep(240000);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

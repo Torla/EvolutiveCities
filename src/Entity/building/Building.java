@@ -17,6 +17,7 @@ public class Building extends Entity {
 
 		this.traverseCost=traverseCost;
 
+
 		Optional<Entity> b =  world.getEntities().stream()
 				.filter(x->x.getPositionX()==positionX && x.getPositionY()==positionY)
 				.filter(x->x!=this)

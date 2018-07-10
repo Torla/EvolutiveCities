@@ -58,10 +58,11 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 		EvolutiveAutomaton auto = new EvolutiveAutomaton(this);
 		auto.generation=this.generation+1;
 		auto.mutation=this.mutation+rng.nextInt(Options.mutationChange*2)-Options.mutationChange;
+		auto.mutation=auto.mutation<Options.minimumMutation?Options.minimumMutation:auto.mutation;
 		for(State state:this.getStates()){
 			State newState = new State();
 			for(int i=0;i<Options.stackValuesNum;i++){
-				if(fate(Options.startingMutation)){
+				if(fate(this.mutation)){
 					LinkedList<State> l = new LinkedList<>(getStates());
 					newState.addEdge(i, new Edge(l.get(rng.nextInt(l.size())),
 							StackAction.values()[rng.nextInt(StackAction.values().length)],
@@ -75,7 +76,7 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 			}
 			auto.addState(newState);
 		}
-		if(auto.getStates().size()<Options.stateMaxNum && fate(Options.startingMutation)){
+		if(auto.getStates().size()<Options.stateMaxNum && fate(this.mutation)){
 			State newState = new State();
 			for(int i=0;i<Options.stackValuesNum;i++) {
 				LinkedList<State> l = new LinkedList<>(getStates());
@@ -86,11 +87,11 @@ public class EvolutiveAutomaton extends Automaton implements Evolutive<Evolutive
 			}
 			auto.addState(newState);
 		}
-		if(fate(Options.startingMutation)){
+		if(fate(this.mutation)){
 			State initialStat = new ArrayList<State>(auto.getStates()).get(rng.nextInt(auto.getStates().size()));
 			auto.setInitialState(initialStat);
 		}
-		if(fate(Options.startingMutation)){
+		if(fate(this.mutation)){
 			auto.removeState(new ArrayList<State>(auto.getStates()).get(rng.nextInt(auto.getStates().size())));
 		}
 		return auto;
