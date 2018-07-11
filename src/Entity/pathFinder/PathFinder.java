@@ -1,20 +1,16 @@
 package Entity.pathFinder;
 
 import Entity.Entity;
-import Entity.building.Building;
 import city.City;
 import javafx.geometry.Pos;
-import org.omg.CORBA.INTERNAL;
 
-import java.lang.reflect.Array;
-import java.nio.file.attribute.PosixFileAttributes;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 public class PathFinder {
 
-	private static final int maxDistance = 3;
+	private static final int maxDistance = 15;
 
 	static private LinkedList<Position> naiveDirectionToNearest(City owner, int x, int y, Class<? extends Entity> classToFind){
 		LinkedList<Position> ret = new LinkedList<>();
@@ -39,24 +35,32 @@ public class PathFinder {
 
 
 		if(owner.getWorld().getEntities().stream()
-				.filter(a -> manhattanDistance(a.getPositionX(), a.getPositionY(), x, y) <= maxDistance)
+				.filter(a -> manhattanDistance(a.getPositionX(), a.getPositionY(), x, y) < maxDistance)
 				.filter(classToFind::isInstance)
-				.filter(c->c.getOwner()!=owner)
-				.map(a -> new Position(a.getPositionX(), a.getPositionY())).count()==0) {
+				.noneMatch(c->c.getOwner()!=owner)
+				) {
 		 return naiveDirectionToNearest(owner,x,y,classToFind);
 		}
 
 
-		LinkedList<Position> toCheck = new LinkedList<>();
 		LinkedList<Position> path = new LinkedList<>();
 		Map<Position,Integer> distanceMap = new HashMap<>();
+		PriorityQueue<Position> toCheck = new PriorityQueue<>(1000,Comparator.comparingInt(distanceMap::get));
+		Set<Position> targets = owner.getWorld().getEntities().stream()
+				.filter(classToFind::isInstance)
+				.filter(a->a.getOwner()!=owner)
+				.filter(a -> manhattanDistance(a.getPositionX(), a.getPositionY(), x, y) <= maxDistance)
+				.map(a-> new Position(a.getPositionX(),a.getPositionY()))
+				.collect(Collectors.toSet());
+		Position nearest=null;
+
 
 		toCheck.add(new Position(x,y));
 		distanceMap.put(new Position(x,y),0);
 
 
 		while(toCheck.size()!=0){
-			Position pos = toCheck.pop();
+			Position pos = toCheck.poll();
 
 			if(manhattanDistance(x,y,pos.x,pos.y)>maxDistance+1) continue;
 
@@ -69,18 +73,23 @@ public class PathFinder {
 			for(Position to:toPos){
 				costTo =owner.getWorld().traverseCost(to.x,to.y);
 				if(!distanceMap.containsKey(to) || distanceMap.get(to)>distanceMap.get(pos)+costTo){
-					toCheck.push(to);
 					distanceMap.put(to,distanceMap.get(pos)+costTo);
+					toCheck.add(to);
+					if(targets.contains(to)){
+						nearest=to;
+						toCheck.clear();
+						break;
+					}
 				}
 			}
 		}
 
-		Position nearest = owner.getWorld().getEntities().stream()
+		/*Position nearest = owner.getWorld().getEntities().stream()
 				.filter(classToFind::isInstance)
 				.filter(c->c.getOwner()!=owner)
 				.filter(a -> manhattanDistance(a.getPositionX(), a.getPositionY(), x, y) <= maxDistance)
 				.map(a -> new Position(a.getPositionX(), a.getPositionY())).min(Comparator.comparingInt(distanceMap::get)).get();
-
+		*/
 
 		Position pos = nearest;
 		while(pos.x!=x || pos.y!=y){
@@ -91,7 +100,7 @@ public class PathFinder {
 			toPos[2]= new Position(pos.x,pos.y+1);
 			toPos[3]= new Position(pos.x,pos.y-1);
 			try {
-				pos = Arrays.stream(toPos).min(Comparator.comparingInt(distanceMap::get)).get();
+				pos = Arrays.stream(toPos).min(Comparator.comparingInt(a-> distanceMap.getOrDefault(a, 10000))).get();
 			}catch (NullPointerException e){
 				e.printStackTrace();
 			}

@@ -1,5 +1,6 @@
 package Entity;
 
+import Entity.unity.Unit;
 import Game.World;
 import city.City;
 import graphics.Showable;
@@ -47,7 +48,7 @@ public abstract class Entity implements Showable{
 		return owner;
 	}
 
-	public void attack(int power){
+	public void attack(Unit attacker,int power){
 		life-=power;
 		if(life<=0) destroy();
 	}

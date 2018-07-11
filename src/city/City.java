@@ -3,6 +3,7 @@ package city;
 import Entity.Entity;
 import Entity.building.*;
 import Entity.pathFinder.PathFinder;
+import Entity.unity.Knight;
 import Entity.unity.Soldier;
 import Entity.unity.Unit;
 import Game.World;
@@ -67,6 +68,9 @@ public class City {
 			}else if(entity instanceof Soldier){
 				freeWorkers-=Options.workerPerSoldier;
 				food-=Options.foodPerSoldier;
+			}else if(entity instanceof Knight){
+				freeWorkers-=Options.workerPerKnight;
+				food-=Options.foodPerKnight;
 			}else if(entity instanceof Wall){
 				freeWorkers-=Options.workerPerWall;
 			}
@@ -134,6 +138,16 @@ public class City {
 					.min(Comparator.comparingInt(x->PathFinder.manhattanDistance(x.getPositionX(),x.getPositionY(), cursorX, centerY)));
 				if(op.isPresent()) {
 					new Soldier(world, this, op.get().getPositionX(), op.get().getPositionY());
+				}
+				break;
+			case PRODUCE_KNIGHT:
+				op = world.getEntities().stream()
+					.filter(x->x.getOwner()==this)
+					.filter(x->x instanceof Keep)
+					.map(x->(Keep)x)
+					.min(Comparator.comparingInt(x->PathFinder.manhattanDistance(x.getPositionX(),x.getPositionY(), cursorX, centerY)));
+				if(op.isPresent()) {
+					new Knight(world, this, op.get().getPositionX(), op.get().getPositionY());
 				}
 				break;
 		}

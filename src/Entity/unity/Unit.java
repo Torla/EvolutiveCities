@@ -15,7 +15,7 @@ public class Unit extends Entity{
 	private int power;
 	private int movVelocity;
 	private int movPoint=0;
-	Class<? extends Entity> target;
+	private Class<? extends Entity> target;
 	private LinkedList<Position> path=null;
 
 	public Unit(World world, City owner, Tile tile, int positionX, int positionY, int life, int power, int movVelocity, Class<? extends Entity> target) {
@@ -23,22 +23,31 @@ public class Unit extends Entity{
 		this.life=life;
 		this.movVelocity=movVelocity;
 		this.target=target;
+		this.power=power;
+	}
+
+	@Override
+	public void attack(Unit attacker, int power) {
+		super.attack(attacker, power);
 	}
 
 	public void turn(){
 		Optional<Entity> op= owner.getWorld().getEntities().stream()
+				.filter(target::isInstance)
 				.filter(c->c.getOwner()!=owner)
 				.filter(x->x.getPositionX()==positionX && x.getPositionY()==positionY).findAny();
 		if(op.isPresent()){
-			op.get().attack(power);
+			op.get().attack(this,power);
 			path=null;
 		}
 		else{
 			movPoint+=movVelocity;
 			if(path==null) {
-				path = PathFinder.pathToNearestEnemy(this.owner, positionX, positionY,target);
+				if(owner.getWorld().getEntities().stream().filter(x->x.getOwner()!=owner).anyMatch(target::isInstance)) {
+					path = PathFinder.pathToNearestEnemy(this.owner, positionX, positionY, target);
+				}
+				if(path==null) return;
 			}
-			if(path==null) return;
 			if(movPoint>=owner.getWorld().traverseCost(path.peek().x,path.peek().y)){
 				movPoint-=owner.getWorld().traverseCost(path.peek().x,path.peek().y);
 				positionX=path.peek().x;

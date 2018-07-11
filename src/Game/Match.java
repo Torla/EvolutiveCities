@@ -48,7 +48,7 @@ public class Match implements Runnable{
 						.filter(x ->x.getFood()+x.getPopulation()>0 && x.getWorld().getEntities().stream().anyMatch(z -> z.getOwner() == x))
 						.collect(Collectors.toList());
 			}
-			if(aliveCities.size()==1) break;
+			if(aliveCities.size()<=1) break;
 			try {
 				Thread.sleep(sleep);
 			} catch (InterruptedException e) {
