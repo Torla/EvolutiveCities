@@ -97,7 +97,9 @@ public class Main {
 					}
 					poolLock.lock();
 					try {
+						System.out.println("Saving...");
 						save();
+						System.out.println("Done");
 					}
 					finally {
 						poolLock.unlock();

@@ -30,7 +30,7 @@ public class Match implements Runnable{
 		Match.sleep = sleep>=0?sleep:0;
 	}
 
-	private static final int maxTurn = 500;
+	private static final int maxTurn = 1000;
 
 	private Set<City> cities=null;
 
@@ -40,9 +40,15 @@ public class Match implements Runnable{
 
 	@Override
 	public void run() {
-
+		Collection<City> aliveCities = new ArrayList<>(cities);
 		for(int turn=0;turn<maxTurn;turn++){
-			cities.forEach(City::turn);
+			aliveCities.forEach(City::turn);
+			if(turn>maxTurn/10+1){
+				aliveCities = aliveCities.stream()
+						.filter(x ->x.getFood()+x.getPopulation()>0 && x.getWorld().getEntities().stream().anyMatch(z -> z.getOwner() == x))
+						.collect(Collectors.toList());
+			}
+			if(aliveCities.size()==1) break;
 			try {
 				Thread.sleep(sleep);
 			} catch (InterruptedException e) {

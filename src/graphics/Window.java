@@ -49,8 +49,7 @@ public class Window extends Frame implements KeyListener,WindowListener{
 				break;
 			case  KeyEvent.VK_PAGE_DOWN:
 				Match.setSleep(Match.getSleep()-50);
-			default:
-				System.out.println(keyCode);
+				break;
 		}
 	}
 	@Override

@@ -7,6 +7,6 @@ import graphics.Tile;
 public class Wall extends Building {
 
 	public Wall(World world, City owner, int positionX, int positionY) {
-		super(world, owner, Tile.GATE, positionX, positionY, 10, 10000);
+		super(world, owner, Tile.GATE, positionX, positionY, 0, 10000);
 	}
 }
