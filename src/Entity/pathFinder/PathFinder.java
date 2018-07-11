@@ -1,5 +1,6 @@
 package Entity.pathFinder;
 
+import Entity.Entity;
 import Entity.building.Building;
 import city.City;
 import javafx.geometry.Pos;
@@ -15,14 +16,16 @@ public class PathFinder {
 
 	private static final int maxDistance = 3;
 
-	static private LinkedList<Position> naiveDirectionToNearest(City owner, int x, int y){
+	static private LinkedList<Position> naiveDirectionToNearest(City owner, int x, int y, Class<? extends Entity> classToFind){
 		LinkedList<Position> ret = new LinkedList<>();
 		Optional<Position> toOp = owner.getWorld().getEntities().stream()
+				.filter(classToFind::isInstance)
 				.filter(c->c.getOwner()!=owner)
 				.map(a->new Position(a.getPositionX(),a.getPositionY()))
 				.min(Comparator.comparingInt(b->manhattanDistance(b.x,b.y,x,y)));
 		if(!toOp.isPresent()) return null;
 		Position to = toOp.get();
+
 		if(Math.abs(x-to.x)>Math.abs(y-to.y)){
 			ret.add(new Position((x<to.x)?x+1:x-1,y));
 		}
@@ -32,22 +35,16 @@ public class PathFinder {
 		return ret;
 	}
 
-	static public LinkedList<Position> pathToNearestEnemy(City owner, int x, int y){
+	static public LinkedList<Position> pathToNearestEnemy(City owner, int x, int y,Class<? extends Entity> classToFind){
 
 
 		if(owner.getWorld().getEntities().stream()
 				.filter(a -> manhattanDistance(a.getPositionX(), a.getPositionY(), x, y) <= maxDistance)
+				.filter(classToFind::isInstance)
 				.filter(c->c.getOwner()!=owner)
 				.map(a -> new Position(a.getPositionX(), a.getPositionY())).count()==0) {
-		 return naiveDirectionToNearest(owner,x,y);
+		 return naiveDirectionToNearest(owner,x,y,classToFind);
 		}
-
-		Map<Position,Integer> cost = owner.getWorld().getEntities().stream()
-				.filter(c->c.getOwner()!=owner)
-				.filter(a->a instanceof Building)
-				.filter(a->manhattanDistance(a.getPositionX(),a.getPositionY(),x,y)<=maxDistance)
-				.map(d->(Building) d)
-				.collect(Collectors.toMap(b->new Position(b.getPositionX(),b.getPositionY()), Building::getTraverseCost));
 
 
 		LinkedList<Position> toCheck = new LinkedList<>();
@@ -68,10 +65,9 @@ public class PathFinder {
 			toPos[1]= new Position(pos.x-1,pos.y);
 			toPos[2]= new Position(pos.x,pos.y+1);
 			toPos[3]= new Position(pos.x,pos.y-1);
-			int costTo;
+			int costTo=0;
 			for(Position to:toPos){
-				costTo=1;
-				if(cost.containsKey(to)) costTo+=cost.get(to);
+				costTo =owner.getWorld().traverseCost(to.x,to.y);
 				if(!distanceMap.containsKey(to) || distanceMap.get(to)>distanceMap.get(pos)+costTo){
 					toCheck.push(to);
 					distanceMap.put(to,distanceMap.get(pos)+costTo);
@@ -80,6 +76,7 @@ public class PathFinder {
 		}
 
 		Position nearest = owner.getWorld().getEntities().stream()
+				.filter(classToFind::isInstance)
 				.filter(c->c.getOwner()!=owner)
 				.filter(a -> manhattanDistance(a.getPositionX(), a.getPositionY(), x, y) <= maxDistance)
 				.map(a -> new Position(a.getPositionX(), a.getPositionY())).min(Comparator.comparingInt(distanceMap::get)).get();
