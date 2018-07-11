@@ -7,10 +7,12 @@ import graphics.Graphics;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 class Cicle implements Runnable {
 	World world;
+	Random rng = new Random();
 
 	public Cicle(World world) {
 		this.world = world;
@@ -23,24 +25,23 @@ class Cicle implements Runnable {
 
 	private void cicle(World world){
 		while (true) {
+			int playerNum=rng.nextInt(2)*2+2;
 			world.reset();
 			LinkedList<City> c = new LinkedList<>();
 			int i = 0;
 			final Collection<EvolutiveAutomaton> pop;
 			try {
 				Main.poolLock.lock();
-				pop = Main.pool.getPop(2);
+				pop = Main.pool.getPop(playerNum);
 			}finally {
 				Main.poolLock.unlock();
 			}
 			for (Automaton automaton : pop) {
 				automaton.reset();
-				c.add(new City(world, automaton, 20 * (i % 2) + 10, 20 * (i / 2) + 10));
+				c.add(new City(world, automaton, 20 * (i % 2) + 10+(rng.nextInt(10)-5), 20 * (i / 2) + 10+(rng.nextInt(10)-5)));
 				i++;
 			}
 			Match match = new Match(c);
-			Graphics.setMatch(match);
-
 			match.run();
 
 			System.out.println(match.rank().get(0));
@@ -48,7 +49,7 @@ class Cicle implements Runnable {
 			System.out.println(match.rank().stream().map(City::getAutomaton).mapToDouble(x->((EvolutiveAutomaton)x).getMutation()).average());
 			try {
 				Main.poolLock.lock();
-				Main.pool.generation(match.rank().stream().map(x -> (EvolutiveAutomaton) x.getAutomaton()).collect(Collectors.toList()), 1, 1);
+				Main.pool.generation(match.rank().stream().map(x -> (EvolutiveAutomaton) x.getAutomaton()).collect(Collectors.toList()), playerNum/2, playerNum/2);
 			} finally {
 				Main.poolLock.unlock();
 			}

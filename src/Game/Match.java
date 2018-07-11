@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 public class Match implements Runnable{
 
+
 	public void setCities(Set<City> cities) {
 		this.cities = cities;
 	}

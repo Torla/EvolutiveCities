@@ -9,5 +9,5 @@ public class Options {
 	static final int initialStateMaxNum = 50;
 	static final int startingMutation = 500; //per mille
 	static final int minimumMutation = 100; //per mille
-	static final int mutationChange = 0; //per mille
+	static final int mutationChange = 5; //per mille
 }
