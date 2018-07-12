@@ -20,10 +20,7 @@ public class Test {
 		Graphics.setWorld(world);
 		Graphics.start();
 
-		for(int i=0;i<100;i++){
-			System.out.print("a" + i +",");
-			if(i%7==0) System.out.println();
-		}
+
 
 		new Soldier(world,city,3,3);
 		//new House(world,city,0,2);

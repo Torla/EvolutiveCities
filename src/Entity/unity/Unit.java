@@ -42,12 +42,19 @@ public class Unit extends Entity{
 		}
 		else{
 			movPoint+=movVelocity;
+			//check if path no longer lead to target
+			if(path!=null && owner.getWorld().getEntities().stream().filter(target::isInstance).noneMatch(x->x.getPositionY()==path.getLast().y && x.getPositionX()==path.getLast().x)){
+				path=null;
+			}
+
+			//select new path
 			if(path==null) {
 				if(owner.getWorld().getEntities().stream().filter(x->x.getOwner()!=owner).anyMatch(target::isInstance)) {
 					path = PathFinder.pathToNearestEnemy(this.owner, positionX, positionY, target);
 				}
 				if(path==null) return;
 			}
+			//move
 			if(movPoint>=owner.getWorld().traverseCost(path.peek().x,path.peek().y)){
 				movPoint-=owner.getWorld().traverseCost(path.peek().x,path.peek().y);
 				positionX=path.peek().x;
