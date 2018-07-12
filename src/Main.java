@@ -1,11 +1,8 @@
-import Game.World;
-import automaton.Automaton;
+import world.World;
 import city.Action;
-import city.City;
 import evolutiveAutomaton.EvolutiveAutomaton;
 import genetic.Pool;
 import graphics.Graphics;
-import Game.Match;
 
 import java.io.*;
 

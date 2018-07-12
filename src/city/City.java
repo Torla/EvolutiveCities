@@ -6,7 +6,7 @@ import Entity.pathFinder.PathFinder;
 import Entity.unity.Knight;
 import Entity.unity.Soldier;
 import Entity.unity.Unit;
-import Game.World;
+import world.World;
 import automaton.Automaton;
 import graphics.Showable;
 import graphics.Tile;

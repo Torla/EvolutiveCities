@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class PathFinder {
 
-	private static final int maxDistance = 15;
+	private static final int maxDistance = 5;
 
 	static private LinkedList<Position> naiveDirectionToNearest(City owner, int x, int y, Class<? extends Entity> classToFind){
 		LinkedList<Position> ret = new LinkedList<>();

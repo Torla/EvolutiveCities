@@ -1,8 +1,6 @@
-package Game;
+package world;
 
 
-import Entity.building.Building;
-import Entity.unity.Unit;
 import city.City;
 import graphics.Showable;
 
@@ -11,6 +9,8 @@ import java.util.stream.Collectors;
 
 public class Match implements Runnable{
 
+
+	private static final int maxTurn = 10000;
 
 	public void setCities(Set<City> cities) {
 		this.cities = cities;
@@ -30,7 +30,7 @@ public class Match implements Runnable{
 		Match.sleep = sleep>=0?sleep:0;
 	}
 
-	private static final int maxTurn = 10000;
+
 
 	private Set<City> cities=null;
 

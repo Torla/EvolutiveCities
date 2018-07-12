@@ -1,8 +1,7 @@
 package graphics;
 
-import Game.Match;
+import world.Match;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -13,6 +12,7 @@ public class Window extends Frame implements KeyListener,WindowListener{
 		addWindowListener(this);
 		addKeyListener(this);
 		canvas=new JGameCanvas();
+		canvas.setDoubleBuffered(true);
 		add(canvas);
 		setVisible(true);
 		setSize(Options.screenTilesW*Options.tileW,Options.screenTilesH*Options.tileH);
@@ -21,6 +21,11 @@ public class Window extends Frame implements KeyListener,WindowListener{
 	public void setTile(Tile t, int x, int y){
 		canvas.setTile(t,x,y);
 
+	}
+
+	@Override
+	public void repaint(){
+		canvas.repaint();
 	}
 
 	@Override

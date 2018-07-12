@@ -1,15 +1,13 @@
 package graphics;
 
-import java.awt.Color;
+import java.awt.*;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.net.URL;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.text.html.Option;
 
 public class JGameCanvas extends JPanel{
@@ -45,7 +43,8 @@ public class JGameCanvas extends JPanel{
 		}
 	}
 
-	void drawTile(Graphics g, Tile t, int x, int y){
+
+	private void drawTile(Graphics g, Tile t, int x, int y){
 		// map Tile from the tileset
 		mapChange[x][y]=true;
 		int mx = t.ordinal()%7;

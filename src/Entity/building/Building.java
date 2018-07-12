@@ -1,7 +1,7 @@
 package Entity.building;
 
 import Entity.Entity;
-import Game.World;
+import world.World;
 import city.City;
 import graphics.Tile;
 

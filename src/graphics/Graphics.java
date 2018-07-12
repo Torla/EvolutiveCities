@@ -1,7 +1,7 @@
 package graphics;
 
-import Game.World;
-import Game.Match;
+import world.World;
+import world.Match;
 
 import java.util.stream.Collectors;
 

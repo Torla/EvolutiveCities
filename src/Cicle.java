@@ -1,9 +1,8 @@
-import Game.Match;
-import Game.World;
+import world.Match;
+import world.World;
 import automaton.Automaton;
 import city.City;
 import evolutiveAutomaton.EvolutiveAutomaton;
-import graphics.Graphics;
 
 import java.util.Collection;
 import java.util.LinkedList;

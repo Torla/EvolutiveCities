@@ -3,7 +3,7 @@ package Entity.unity;
 import Entity.Entity;
 import Entity.pathFinder.PathFinder;
 import Entity.pathFinder.Position;
-import Game.World;
+import world.World;
 import city.City;
 import graphics.Tile;
 
@@ -15,8 +15,8 @@ public class Unit extends Entity{
 	private int power;
 	private int movVelocity;
 	private int movPoint=0;
-	private Class<? extends Entity> target;
-	private LinkedList<Position> path=null;
+	protected Class<? extends Entity> target;
+	protected LinkedList<Position> path=null;
 
 	public Unit(World world, City owner, Tile tile, int positionX, int positionY, int life, int power, int movVelocity, Class<? extends Entity> target) {
 		super(world, owner, tile, positionX, positionY, life);
