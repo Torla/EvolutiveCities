@@ -37,4 +37,8 @@ public class Building extends Entity {
 	public int getTraverseCost() {
 		return traverseCost;
 	}
+
+	@Override
+	public void turn(){
+	}
 }

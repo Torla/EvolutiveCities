@@ -1,12 +1,12 @@
-import Entity.Entity;
-import Entity.pathFinder.PathFinder;
-import Entity.unity.Soldier;
-import Entity.unity.Unit;
+import Entity.building.BanditCamp;
+import game.Match;
 import world.World;
 import automaton.Automaton;
 import city.City;
 import graphics.Graphics;
-import world.terrain.*;
+
+import java.util.Collection;
+import java.util.LinkedList;
 
 public class Test {
 	public static void main(String[] args) {
@@ -17,6 +17,14 @@ public class Test {
 		world.reset();
 		Graphics.setWorld(world);
 		Graphics.start();
+
+		new BanditCamp(world,10,10);
+		new BanditCamp(world,20,20);
+
+		Collection<City> cities = new LinkedList<>();
+		//cities.add(city);
+
+		new Match(world,cities).run();
 
 	}
 

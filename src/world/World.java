@@ -1,6 +1,7 @@
 package world;
 
 import Entity.Entity;
+import Entity.building.BanditCamp;
 import Entity.building.Building;
 import automaton.Automaton;
 import city.City;
@@ -10,8 +11,11 @@ import world.terrain.TerrainFeature;
 
 import java.util.ConcurrentModificationException;
 import java.util.HashSet;
+import java.util.Random;
 
 public class World {
+
+	Random rng = new Random();
 
 	private HashSet<Entity> entities= new HashSet<>();
 	private HashSet<TerrainFeature> terrain = new HashSet<>();
@@ -20,6 +24,7 @@ public class World {
 
 
 	public World() {
+		TerrainBuilder.worldBuild(this);
 
 	}
 
@@ -53,8 +58,10 @@ public class World {
 
 	public void reset(){
 		entities.clear();
-		terrain.clear();
-		TerrainBuilder.worldBuild(this);
+		int bandCampNum = rng.nextInt(Options.bandCampNumMax);
+		for(int i=0;i<bandCampNum;i++){
+			new BanditCamp(this,rng.nextInt(Options.boundary),rng.nextInt(Options.boundary));
+		}
 	}
 
 	public void putFeature(TerrainFeature terrainFeature){

@@ -1,4 +1,6 @@
-import world.Match;
+
+import game.Match;
+import world.Options;
 import world.World;
 import automaton.Automaton;
 import city.City;
@@ -24,7 +26,7 @@ class Cicle implements Runnable {
 
 	private void cicle(World world){
 		while (true) {
-			int playerNum=rng.nextInt(2)*2+2;
+			int playerNum=rng.nextInt(10)*2+2;
 			world.reset();
 			LinkedList<City> c = new LinkedList<>();
 			int i = 0;
@@ -37,10 +39,10 @@ class Cicle implements Runnable {
 			}
 			for (Automaton automaton : pop) {
 				automaton.reset();
-				c.add(new City(world, automaton, 20 * (i % 2) + 10+(rng.nextInt(10)-5), 20 * (i / 2) + 10+(rng.nextInt(10)-5)));
+				c.add(new City(world, automaton, rng.nextInt(Options.boundary), rng.nextInt(Options.boundary)));
 				i++;
 			}
-			Match match = new Match(c);
+			Match match = new Match(world,c);
 			match.run();
 
 			System.out.println(match.rank().get(0));

@@ -1,5 +1,6 @@
 package world.terrain;
 
+import Entity.building.BanditCamp;
 import javafx.geometry.Pos;
 import world.Options;
 import world.World;
@@ -37,9 +38,12 @@ public class TerrainBuilder {
 		for(int i=0;i<Options.boundary;i++){
 			for(int j=0;j<Options.boundary;j++){
 				if(fate(Options.forestOccur,100000)) createForest(world,new Position(i,j),rng.nextInt(Options.forestDim));
-				if(fate(Options.mountainOccur,100000)) createMountain(world,new Position(i,j),rng.nextInt(Options.mountainDim));
+				if(fate(Options.mountainOccur,100000)) createMountain(world,new Position(i,j),rng.nextInt(Options.mountainDim),rng.nextInt(Options.mountainLen));
 			}
 		}
+
+
+
 	}
 
 	private static boolean fate(int n) {
@@ -73,12 +77,12 @@ public class TerrainBuilder {
 			}
 		}
 	}
-	static private void createMountain(World world, Position start,int dim) {
+	static private void createMountain(World world, Position start,int dim,int len) {
 		LinkedList<Position> list = new LinkedList<>();
 		Position pos=start;
 		list.addLast(start);
-		int count=dim;
-		while (count!=0 && fate(count--,dim)){
+		int count=len;
+		while (count!=0 && fate(count--,len)){
 			list.addLast(new Position(pos.x+rng.nextInt(2)-1,pos.y+rng.nextInt(2)-1));
 		}
 		count=dim;

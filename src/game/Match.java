@@ -1,8 +1,10 @@
-package world;
+package game;
 
 
+import Entity.Entity;
 import city.City;
 import graphics.Showable;
+import world.World;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -11,6 +13,8 @@ public class Match implements Runnable{
 
 
 	private static final int maxTurn = 10000;
+
+	private World world;
 
 	public void setCities(Set<City> cities) {
 		this.cities = cities;
@@ -34,7 +38,8 @@ public class Match implements Runnable{
 
 	private Set<City> cities=null;
 
-	public Match(Collection<City> cities) {
+	public Match(World world,Collection<City> cities) {
+		this.world=world;
 		this.cities = new HashSet<>(cities);
 	}
 
@@ -42,6 +47,7 @@ public class Match implements Runnable{
 	public void run() {
 		Collection<City> aliveCities = new ArrayList<>(cities);
 		for(int turn=0;turn<maxTurn;turn++){
+			new LinkedList<Entity>(world.getEntities()).forEach(Entity::turn);
 			aliveCities.forEach(City::turn);
 			if(turn>maxTurn/100+1){
 				aliveCities = aliveCities.stream()

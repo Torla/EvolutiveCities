@@ -158,9 +158,6 @@ public class City {
 		production();
 		upkeep();
 		Action action;
-		for(Unit unit:world.getEntities().stream().filter(x-> x instanceof Unit).map(x->(Unit) x).collect(Collectors.toList())){
-			unit.turn();
-		};
 		action=(Action) automaton.next();
 		perform(action);
 	};

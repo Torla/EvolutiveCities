@@ -1,6 +1,8 @@
 package graphics;
 
-import world.Match;
+
+
+import game.Match;
 
 import java.awt.*;
 import java.awt.event.*;

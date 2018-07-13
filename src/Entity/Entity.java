@@ -10,7 +10,7 @@ public abstract class Entity implements Showable{
 
 	protected Tile tile;
 	protected City owner;
-	private World world;
+	protected World world;
 	protected int positionX;
 	protected int positionY;
 
@@ -56,4 +56,6 @@ public abstract class Entity implements Showable{
 	public void destroy(){
 		world.removeEntity(this);
 	}
+
+	public void turn(){}
 }
