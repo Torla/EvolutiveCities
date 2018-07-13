@@ -78,7 +78,7 @@ public class Main {
 		Graphics.setWorld(world);
 		Graphics.start();
 
-		for (int i = 0; i < 1000; i++) pool.add(new EvolutiveAutomaton(Action.values()));
+		for (int i = 0; i < 100; i++) pool.add(new EvolutiveAutomaton(Action.values()));
 
 		load();
 

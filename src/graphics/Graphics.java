@@ -32,6 +32,11 @@ public class Graphics implements Runnable {
 		screenPosY+=y;
 	}
 
+	public static void resetScreenPosition(){
+		screenPosX=0;
+		screenPosY=0;
+	}
+
 	public static void start(){
 		thread= new Thread(graphics);
 		thread.start();
@@ -40,8 +45,17 @@ public class Graphics implements Runnable {
 	@Override
 	public void  run() {
 		while(true){
+
+			Options.screenTilesW=window.getSizeX()/Options.tileW;
+			Options.screenTilesH=window.getSizeY()/Options.tileH;
+
+
 			try {
 				long time = System.currentTimeMillis();
+
+
+
+
 				for (Showable x : world.getShowable().stream()
 						.filter(x -> x.getPositionX() >= screenPosX && x.getPositionX() < screenPosX + Options.screenTilesW && x.getPositionY() > screenPosY && x.getPositionY() < screenPosY + Options.screenTilesH)
 						.collect(Collectors.toList())

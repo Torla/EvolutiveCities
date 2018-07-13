@@ -19,6 +19,10 @@ public class World {
 	City noOwner = new City(this,new Automaton(),0,0);
 
 
+	public World() {
+
+	}
+
 	public void addEntity(Entity entity){
 		entities.add(entity);
 	}
@@ -31,11 +35,11 @@ public class World {
 	}
 
 	public HashSet<Showable> getShowable(){
-		HashSet ret = null;
-		while(ret==null) {
+		HashSet ret = new HashSet();
+		while(ret.size()==0) {
 			try {
-				ret = new HashSet<>(entities);
 				ret.addAll(terrain);
+				ret.addAll(entities);
 			} catch (ConcurrentModificationException e) { //todo mutex
 				//e.printStackTrace();
 			}

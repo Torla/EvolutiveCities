@@ -12,7 +12,7 @@ public class Window extends Frame implements KeyListener,WindowListener{
 		addWindowListener(this);
 		addKeyListener(this);
 		canvas=new JGameCanvas();
-		canvas.setDoubleBuffered(true);
+		//canvas.setDoubleBuffered(true);
 		add(canvas);
 		setVisible(true);
 		setSize(Options.screenTilesW*Options.tileW,Options.screenTilesH*Options.tileH);
@@ -26,6 +26,13 @@ public class Window extends Frame implements KeyListener,WindowListener{
 	@Override
 	public void repaint(){
 		canvas.repaint();
+	}
+
+	public int getSizeX(){
+		return this.getBounds().getSize().width;
+	}
+	public int getSizeY(){
+		return canvas.getBounds().getSize().height;
 	}
 
 	@Override
@@ -55,13 +62,23 @@ public class Window extends Frame implements KeyListener,WindowListener{
 			case  KeyEvent.VK_PAGE_DOWN:
 				Match.setSleep(Match.getSleep()-50);
 				break;
+			case KeyEvent.VK_SPACE:
+				Graphics.resetScreenPosition();
+				break;
+			case KeyEvent.VK_MINUS:
+				if(Options.tileW==1 || Options.tileH==1) break;
+				Options.tileW--;
+				Options.tileH--;
+				break;
+			case KeyEvent.VK_PLUS:
+				Options.tileW++;
+				Options.tileH++;
 		}
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
 
 	}
-
 
 	@Override
 	public void windowOpened(WindowEvent e) {
@@ -97,4 +114,6 @@ public class Window extends Frame implements KeyListener,WindowListener{
 	public void windowDeactivated(WindowEvent e) {
 
 	}
+
+
 }

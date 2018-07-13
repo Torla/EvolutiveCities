@@ -6,10 +6,7 @@ import world.World;
 import automaton.Automaton;
 import city.City;
 import graphics.Graphics;
-import world.terrain.Forest;
-import world.terrain.Lake;
-import world.terrain.TerrainBuilder;
-import world.terrain.TerrainFeature;
+import world.terrain.*;
 
 public class Test {
 	public static void main(String[] args) {
@@ -20,7 +17,7 @@ public class Test {
 		world.reset();
 		Graphics.setWorld(world);
 		Graphics.start();
-		TerrainBuilder.worldBuild(world);
+
 	}
 
 }
