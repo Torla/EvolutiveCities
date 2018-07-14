@@ -17,6 +17,7 @@ public class Unit extends Entity{
 	private int movPoint=0;
 	protected Class<? extends Entity> target;
 	protected LinkedList<Position> path=null;
+	protected boolean goingToTarget=false;
 
 	public Unit(World world, City owner, Tile tile, int positionX, int positionY, int life, int power, int movVelocity, Class<? extends Entity> target) {
 		super(world, owner, tile, positionX, positionY, life);
@@ -44,14 +45,16 @@ public class Unit extends Entity{
 		else{
 			movPoint+=movVelocity;
 			//check if path no longer lead to target
-			if(path!=null && owner.getWorld().getEntities().stream().filter(target::isInstance).noneMatch(x->x.getPositionY()==path.getLast().y && x.getPositionX()==path.getLast().x)){
+			if(goingToTarget && path!=null && owner.getWorld().getEntities().stream().filter(target::isInstance).noneMatch(x->x.getPositionY()==path.getLast().y && x.getPositionX()==path.getLast().x)){
 				path=null;
+				goingToTarget=false;
 			}
 
 			//select new path
 			if(path==null) {
 				if(owner.getWorld().getEntities().stream().filter(x->x.getOwner()!=owner).anyMatch(target::isInstance)) {
 					path = PathFinder.pathToNearestEnemy(this.owner, positionX, positionY, target);
+					goingToTarget=owner.getWorld().getEntities().stream().filter(target::isInstance).anyMatch(x->x.getPositionY()==path.getLast().y && x.getPositionX()==path.getLast().x);
 				}
 				if(path==null) return;
 			}

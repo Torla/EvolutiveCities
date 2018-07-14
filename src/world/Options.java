@@ -12,5 +12,5 @@ public class Options {
 	static public final int mountainLen = 1000;
 	static public final int mountainOccur = 100; //on 100000
 	static public final int hillZone= 500; //on 100000
-	static public final int bandCampNumMax = 3;
+	static public final int bandCampNumMax = 10;
 }
