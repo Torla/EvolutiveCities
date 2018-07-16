@@ -3,6 +3,7 @@ package graphics;
 import game.Match;
 import world.World;
 
+import java.util.ConcurrentModificationException;
 import java.util.stream.Collectors;
 
 public class Graphics implements Runnable {

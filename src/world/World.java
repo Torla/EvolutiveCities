@@ -6,12 +6,14 @@ import Entity.building.Building;
 import automaton.Automaton;
 import city.City;
 import graphics.Showable;
+import world.terrain.Road;
 import world.terrain.TerrainBuilder;
 import world.terrain.TerrainFeature;
 
 import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class World {
 
@@ -68,8 +70,15 @@ public class World {
 		terrain.add(terrainFeature);
 	}
 
+	public  Set<TerrainFeature> getTerrain() {
+		return terrain;
+	}
+
 	public int traverseCost(int x, int y){
 		int ret=1;
+		if(terrain.stream()
+				.filter(a->a.getPositionY()==y && a.getPositionX()==x)
+				.anyMatch(a->a instanceof Road)) return 1;
 		ret+=entities.stream()
 				.filter(b->b instanceof Building).map(c->(Building) c)
 				.filter(a->a.getPositionY()==y && a.getPositionX()==x)

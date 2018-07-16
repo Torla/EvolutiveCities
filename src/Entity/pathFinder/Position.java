@@ -12,7 +12,7 @@ public class Position{
 
 	@Override
 	public int hashCode() {
-		return 0;
+		return x+y;
 	}
 
 	@Override

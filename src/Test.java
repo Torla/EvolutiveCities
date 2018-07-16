@@ -11,9 +11,12 @@ import automaton.Automaton;
 import city.City;
 import graphics.Graphics;
 import world.terrain.Road;
+import world.terrain.TerrainBuilder;
+import world.terrain.*;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class Test {
 	public static void main(String[] args) {
@@ -22,6 +25,8 @@ public class Test {
 		City city = new City(world,new EvolutiveAutomaton(Action.values()),0,0);
 
 		world.reset();
+
+
 		Graphics.setWorld(world);
 		Graphics.start();
 
@@ -30,7 +35,6 @@ public class Test {
 		Collection<City> cities = new LinkedList<>();
 		cities.add(city);
 
-		Road.roadBetween(world,0,0,50,50);
 
 		new Match(world,cities).run();
 

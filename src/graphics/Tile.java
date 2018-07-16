@@ -14,7 +14,7 @@ public enum Tile {
 	ROAD_SE,ROAD_WE,ROAD_WS,a25,a26,a27,a28,
 	ROAD_NS,ROAD_CROSS,a31,a32,a33,a34,a35,
 	ROAD_NE,a37,ROAD_NW,a39,a40,a41,a42,
-	a43,a44,a45,a46,a47,a48,a49,
+	a43,RIVER,a45,a46,a47,a48,a49,
 	a50,a51,a52,a53,a54,a55,a56,
 	a57,a58,a59,a60,a61,a62,a63,
 	ad,ROGUE,SOLDIER,KNIGHT,a68,a69,a70,
@@ -22,5 +22,9 @@ public enum Tile {
 	a78,a79,a80,a81,a82,a83,a84,
 	a85,a86,a87,a88,a89,a90,a91,
 	a92,a93,a94,a95,a96,a97,a98,
+	a99,a100,a101,a102,a103,a104,a105,
+	a106,a107,a108,a109,a110,a111,a112,
+	a113,a114,a115,a116,a117,a118,a119,
+	WATER0,WATER1,WATER2,WATER3,a120,a121,a122,
 	NUM_OF_TILE;
 }

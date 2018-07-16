@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class PathFinder {
 
 	private static final int maxDistance = 5;
-	private static final double heuristicRate=30;
+	private static final double heuristicRate=1000;
 	private static final Random rng = ThreadLocalRandom.current();
 
 	static private LinkedList<Position> naiveDirectionToNearest(City owner, int x, int y, Class<? extends Entity> classToFind){

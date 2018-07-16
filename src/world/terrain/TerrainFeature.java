@@ -9,6 +9,7 @@ public class TerrainFeature implements Showable{
 	private int x;
 	private int y;
 	Tile tile;
+	World world;
 
 	private int traverseCost;
 
@@ -18,6 +19,7 @@ public class TerrainFeature implements Showable{
 		this.y = y;
 		this.tile = tile;
 		this.traverseCost = traverseCost;
+		this.world=world;
 		world.putFeature(this);
 	}
 

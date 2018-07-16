@@ -1,12 +1,12 @@
 package world.terrain;
 
-import Entity.building.BanditCamp;
-import javafx.geometry.Pos;
+
 import world.Options;
 import world.World;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class TerrainBuilder {
 
@@ -33,16 +33,23 @@ public class TerrainBuilder {
 
 	static Random rng = new Random();
 
+
+	private static int[][] heightMap = new int[Options.boundary][Options.boundary];
+
 	static public void worldBuild(World world) {
-		used.clear();
-		for(int i=0;i<Options.boundary;i++){
-			for(int j=0;j<Options.boundary;j++){
-				if(fate(Options.forestOccur,100000)) createForest(world,new Position(i,j),rng.nextInt(Options.forestDim));
-				if(fate(Options.mountainOccur,100000)) createMountain(world,new Position(i,j),rng.nextInt(Options.mountainDim),rng.nextInt(Options.mountainLen));
-			}
+
+
+		generateHeightMap();
+		createMountain(world);
+
+		createForest(world);
+
+		int numRoad = rng.nextInt(Options.roadNumMax);
+		for(int i=0;i<numRoad;i++){
+			//Road.roadBetween(world,rng.nextInt(Options.boundary),rng.nextInt(Options.boundary),rng.nextInt(Options.boundary),rng.nextInt(Options.boundary));
 		}
 
-
+		createRiver(world,new Position(50,50));
 
 	}
 
@@ -56,53 +63,96 @@ public class TerrainBuilder {
 
 	private static HashSet<Position> used = new HashSet<>(); //position yet processed
 
-	static private void createForest(World world, Position start,int dim) {
-		LinkedList<Position> list = new LinkedList<>();
-		list.push(start);
-		Position pos;
-		int count=dim;
-		while (list.size() > 0 && count>0) {
-			if (!fate(count--,dim)) continue;
-			Collections.shuffle(list);
-			pos = list.pop();
-			if (fate(Options.LakeOccur)) new Lake(world, pos.x, pos.y);
-			else new Forest(world, pos.x, pos.y);
-			for (int i = -1; i <= 1; i++) {
-				for (int j = -1; j <= 1; j++) {
-					Position newPos = new Position(pos.x + i, pos.y + j);
-					if(used.contains(newPos)) continue;
-					used.add(newPos);
-					list.addLast(newPos);
+
+	static private void generateHeightMap(){
+		OpenSimplexNoise noise = new OpenSimplexNoise(rng.nextLong());
+		double alfa= rng.nextDouble();
+		double beta= rng.nextDouble();
+		for(double i=0;i<Options.boundary;i++){
+			for(double j=0;j<Options.boundary;j++){
+				heightMap[(int)i][(int)j]= (int) (Math.pow(noise.eval((i*Math.sin(alfa)+j*Math.cos(alfa))/10.,(j*Math.sin(alfa)+i*Math.cos(alfa))/15.),3)*100.);
+
+				alfa+=beta;
+
+				heightMap[(int)i][(int)j]+= (int) (Math.pow(noise.eval((i*Math.sin(alfa)+j*Math.cos(alfa))/10.,(j*Math.sin(alfa)+i*Math.cos(alfa))/15.),3)*100.);
+
+				alfa-=beta;
+
+				heightMap[(int) i][(int) j]/=2;
+
+			}
+		}
+
+
+		for(int count=0;count<1;count++){
+			int[][] convMap = new int[Options.boundary][Options.boundary];
+			for (int i = 0; i < Options.boundary; i++) {
+				for (int j = 0; j < Options.boundary; j++) {
+					for (int x = i - 1; x <= i + 1; x++) {
+						for (int y = j - 1; y <= j + 1; y++) {
+							try {
+								convMap[i][j] += heightMap[x][y];
+							}catch (ArrayIndexOutOfBoundsException e){}
+						}
+					}
+					convMap[i][j] /= 9;
+				}
+			}
+			heightMap = convMap;
+		}
+
+	}
+	static private void createForest(World world){
+		OpenSimplexNoise noise = new OpenSimplexNoise(rng.nextLong());
+		for(int i=0;i<Options.boundary;i++){
+			for(int j=0;j<Options.boundary;j++){
+				if(Math.pow(noise.eval(i/20.,j/20.),0.5)>0){
+					new Forest(world,i,j);
 				}
 			}
 		}
 	}
-	static private void createMountain(World world, Position start,int dim,int len) {
-		LinkedList<Position> list = new LinkedList<>();
-		Position pos=start;
-		list.addLast(start);
-		int count=len;
-		while (count!=0 && fate(count--,len)){
-			list.addLast(new Position(pos.x+rng.nextInt(2)-1,pos.y+rng.nextInt(2)-1));
-		}
-		count=dim;
-		boolean hill=false;
-		while (list.size() > 0 && count>0) {
-			if (!fate(count--,dim)) continue;
-			Collections.shuffle(list);
-			pos = list.pop();
-			if(fate(Options.hillZone,100000)) hill=true;
-			if (fate(Options.LakeOccur)) new Lake(world, pos.x, pos.y);
-			else if(hill){new Hills(world,pos.x,pos.y);}
-			else new Mountain(world, pos.x, pos.y);
-			for (int i = -1; i <= 1; i++) {
-				for (int j = -1; j <= 1; j++) {
-					Position newPos = new Position(pos.x + i, pos.y + j);
-					if(used.contains(newPos)) continue;
-					used.add(newPos);
-					list.addLast(newPos);
-				}
+	static private void createMountain(World world) {
+
+		for(int i=0;i<Options.boundary;i++){
+			for(int j=0;j<Options.boundary;j++){
+				if(heightMap[i][j]>10) new Mountain(world,i,j);
+				else if(heightMap[i][j]>6) new Hills(world,i,j);
+				else if(heightMap[i][j]<-10) new Water(world,i,j);
 			}
 		}
+
+	}
+	static private void createRiver(World world,Position start){
+
+		int dir=rng.nextInt(4);
+
+		Set<Position> thisRiver = new HashSet<>();
+
+		Position pos=start;
+		while(pos.x<Options.boundary && pos.x>=0 && pos.y<Options.boundary && pos.y>=0){
+
+			new River(world,pos.x,pos.y);
+
+			thisRiver.add(pos);
+
+			Position[] toPos = new Position[4];
+			toPos[0]= new Position(pos.x+1,pos.y);
+			toPos[1]= new Position(pos.x,pos.y+1);
+			toPos[2]= new Position(pos.x-1,pos.y);
+			toPos[3]= new Position(pos.x,pos.y-1);
+
+
+			pos=Arrays.stream(toPos).min(Comparator.comparingInt(a->heightMap[a.x][a.y])).get();
+			if(thisRiver.contains(pos)){
+				break;
+			}
+			final TerrainFeature terrainFeature = world.getTerrain().stream().filter(a -> a instanceof Water).findAny().get();
+			if(terrainFeature.getPositionX()==pos.x && terrainFeature.getPositionY()==pos.y){
+				break;
+			}
+
+		}
+
 	}
 }
