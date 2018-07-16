@@ -14,6 +14,6 @@ public class Options {
 	static public final int hillZone= 500; //on 100000
 	static public final int bandCampNumMax = 10;
 	static public final int roadNumMax =10;
-	static public final int riverNumMax = 5;
+	static public final int riverNumMax = 100;
 	static public final int riverCurviness = 30;
 }

@@ -7,6 +7,8 @@ import world.World;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class TerrainBuilder {
 
@@ -42,14 +44,22 @@ public class TerrainBuilder {
 		generateHeightMap();
 		createMountain(world);
 
-		createForest(world);
+		//createForest(world);
 
 		int numRoad = rng.nextInt(Options.roadNumMax);
 		for(int i=0;i<numRoad;i++){
 			//Road.roadBetween(world,rng.nextInt(Options.boundary),rng.nextInt(Options.boundary),rng.nextInt(Options.boundary),rng.nextInt(Options.boundary));
 		}
 
-		createRiver(world,new Position(50,50));
+		int numRiver = rng.nextInt(Options.riverNumMax);
+		System.out.println(numRiver);
+		final List<Position> collect = world.getTerrain().stream().filter(Mountain.class::isInstance).map(a -> new Position(a.getPositionX(), a.getPositionY())).collect(Collectors.toList());
+		for(int i=0;i<numRiver;i++){
+			createRiver(world, collect.get(rng.nextInt(collect.size())));
+
+		}
+
+
 
 	}
 
@@ -143,14 +153,36 @@ public class TerrainBuilder {
 			toPos[3]= new Position(pos.x,pos.y-1);
 
 
-			pos=Arrays.stream(toPos).min(Comparator.comparingInt(a->heightMap[a.x][a.y])).get();
-			if(thisRiver.contains(pos)){
+			Position tempPos=Arrays.stream(toPos).min(Comparator.comparingInt(a -> {
+				try {
+					return heightMap[a.x][a.y];
+				}catch (ArrayIndexOutOfBoundsException e){
+					return 0;
+				}
+			})).get();
+
+			if(thisRiver.contains(tempPos)){
+				thisRiver.remove(pos);
+				new Lake(world,pos.x,pos.y);
 				break;
 			}
-			final TerrainFeature terrainFeature = world.getTerrain().stream().filter(a -> a instanceof Water).findAny().get();
-			if(terrainFeature.getPositionX()==pos.x && terrainFeature.getPositionY()==pos.y){
+
+
+			pos=tempPos;
+
+			Position finalPos = pos;
+
+			final Optional<TerrainFeature> terrainFeature = world.getTerrain().stream()
+					.filter(a -> a instanceof Water || a instanceof River)
+					.filter(a->a.getPositionX()==finalPos.x && a.getPositionY()==finalPos.y).findAny();
+			if(terrainFeature.isPresent()){
 				break;
 			}
+
+			world.getTerrain().removeAll(world.getTerrain().stream()
+					.filter(a->!(a instanceof River))
+					.filter(a->thisRiver.contains(new Position(a.getPositionX(),a.getPositionY())))
+					.collect(Collectors.toList()));
 
 		}
 
